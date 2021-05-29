@@ -1,0 +1,60 @@
+.pageheader{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: whitesmoke;
+}
+.listandsize{
+    display: flex;
+    align-items: baseline!important;
+    margin-bottom: -10px!important;
+    flex: .5;
+}
+.listandsize h1{
+    font-weight: 500;
+    margin-right: .8rem;
+}
+.listandsize span{
+    font-size: .7rem;
+    color:white;
+    padding: 2px 6px;
+    border-radius: 7px;
+    background: #6F2D91;
+}
+.createfilter{
+    flex: .5;
+    justify-content: flex-end;
+    display: flex;
+}
+.createfilter button{
+    margin:3px
+}
+.create{
+    padding: 1rem 2rem;
+    background: #6F2D91;
+    color: white;
+    border: 1px solid transparent;
+}
+.create:hover{
+    cursor: pointer;
+    background:#c250fc;
+}
+.filter{
+    padding: 1rem 2rem;
+    border: 1px solid #6F2D91;
+    color:#6F2D91;
+    font-size: 1rem;
+    font-weight: 500;
+}
+.filter span{
+    display: inline-block;
+    margin-right: 2px;
+}
+.filter:hover{
+    cursor: pointer;
+    color: black;
+    background: #c250fc;
+}
+.MuiAppBar-colorPrimary{
+    background-color: #6F2D91!important;
+}

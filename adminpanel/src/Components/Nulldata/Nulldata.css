@@ -1,0 +1,13 @@
+.no_record h2{
+    font-size: 2.6rem;
+    margin-bottom: .5rem;
+    font-weight: 500;
+    color: #6F2D91;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', 'Verdana', 'sans-serif';
+}
+.no_record h5{
+    margin-top: .5rem;
+    font-weight: 500;
+    color: #c250fc;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', 'Verdana', 'sans-serif';
+}

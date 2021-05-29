@@ -1,0 +1,38 @@
+.contest__heading{
+    font-size: 2rem;
+font-family:'Courier New', Courier, monospace
+}
+.contestcards{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-flow: wrap;
+}
+.contestcards a{
+display: block;
+width: 40%;
+background-color: whitesmoke;
+text-decoration: none;
+color: black;
+height: 8rem;
+display: flex;
+font-size: 1.6rem;
+align-items: center;
+justify-content: center;
+margin: 2rem;
+font-family: 'Courier New', Courier, monospace;
+transition: all .2s;
+}
+.contestcards a:hover{
+    color: teal;
+    background-color: white;
+    box-shadow: 1px 0px 10px rgba(0,0,0,.4);
+}
+.contest__questionheader{
+    margin: 1rem;
+}
+.contest__questonsnull{
+    background-color: whitesmoke;
+    padding: 2rem 0rem;
+    margin: 0rem 1rem;
+}

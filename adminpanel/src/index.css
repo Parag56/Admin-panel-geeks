@@ -1,0 +1,43 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+.user__name{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-left: 68%;
+}
+.user__name h2{
+  margin-right: .6rem;
+}
+@media only screen and (max-width:700px) {
+  .user__name{
+    margin-left: 12%;
+  }
+}
+.logoutbtn{
+  background-color: transparent;
+  padding: .6rem 1.4rem;
+  border: 2px solid rgb(7, 29, 29);
+  border-radius: 5px;
+}
+.logoutbtn:hover{
+  cursor: pointer;
+}
+.logo_geek{
+  width: 2.1rem;
+}
+.MuiPaper-root{
+  box-shadow: none!important;
+  background: white;
+}

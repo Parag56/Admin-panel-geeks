@@ -1,0 +1,132 @@
+
+
+ .logindiv {
+	 overflow: hidden!important;
+	 min-height: 100vh;
+	 padding: 1rem 0rem;
+	 display: flex;
+	 align-items: center;
+	 font-family: 'Recursive', sans-serif;
+	 font-size: 1.2rem;
+	 position: relative;
+	 user-select: none;
+	 z-index: 1;
+}
+ .bg-box {
+	 position: absolute;
+	 top: 0;
+	 left: 0;
+	 width: 100%;
+	 height: 100%;
+	 background-color: #286aaf;
+	 z-index: -1;
+	 display: flex;
+	 overflow: hidden;
+}
+ .bg-box div {
+	 flex: 1;
+	 margin: 0 0.3rem;
+	 background-repeat: no-repeat;
+	 background-size: 100% auto;
+	 border-radius: 0.5rem;
+}
+ .bg-box .bg1 {
+	 background-image: url(https://images.unsplash.com/photo-1593642532781-03e79bf5bec2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=668&q=80);
+	 background-position: left center;
+	 animation: fadeinBottom 1s both;
+     width: 50rem;
+}
+ .bg-box .bg2 {
+	 background-image: url(https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80);
+	 background-position: right center;
+	 animation: fadeinTop 1s 0.3s both;
+}
+ .form {
+     position:relative;
+	 margin: auto;
+	 width: 26rem;
+	 padding: 6rem;
+	 color: #07417d;
+	 background: rgba(255, 255, 255, 0.3);
+	 border-radius: 7rem 0 7rem 0;
+	 backdrop-filter: blur(10px);
+	 box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+ .form label {
+	 display: block;
+     text-align: left;
+	 font-weight: bold;
+}
+ .form input {
+	 appearance: none;
+	 display: block;
+	 width: 80%;
+     font-size: 1rem;
+	 margin: 1rem 0 0.9rem;
+	 border: none;
+	 border-radius: 1rem;
+	 padding: .7rem .9rem;
+	 padding-left: 2.2rem;
+	 font-family: inherit;
+}
+ .form input:focus, .form input:focus-within {
+	 outline: none;
+	 box-shadow: 0 0 5px 2px rgba(255, 255, 255, 0.5);
+}
+ .form fas {
+	 font-size: 1.2em;
+}
+ .form .input-box {
+	 position: relative;
+}
+ .form .prefix {
+    position: absolute;
+    color: lightgrey;
+    top: 10px;
+    bottom: 0;
+    left: 0.7rem;
+    margin: auto;
+}
+ .form .switch-btn {
+	position: absolute;
+    top: -3px;
+    bottom: 0;
+    right: 32px;
+    padding: 0.8rem;
+    margin: auto;
+    cursor: pointer;
+}
+ .form .send-btn {
+	 display: inline-block;
+	 padding: 0.6rem 1.2rem;
+	 color: #fff;
+     position: absolute;
+     left: 17%;
+	 background-color: #286aaf;
+	 border-radius: 0.3rem;
+	 cursor: pointer;
+}
+ .form .send-btn fas {
+	 vertical-align: middle;
+}
+ @keyframes fadeinBottom {
+	 from {
+		 opacity: 0;
+		 transform: translateY(7rem);
+	}
+	 to {
+		 opacity: 1;
+		 transform: translateY(3rem);
+	}
+}
+ @keyframes fadeinTop {
+	 from {
+		 opacity: 0;
+		 transform: translateY(-7rem);
+	}
+	 to {
+		 opacity: 1;
+		 transform: translateY(-3rem);
+	}
+}
+ 
