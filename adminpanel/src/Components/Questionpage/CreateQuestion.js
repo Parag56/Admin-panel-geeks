@@ -1,21 +1,17 @@
 import React,{useState} from 'react'
+import {useParams} from 'react-router-dom'
 import ImageUploading from 'react-images-uploading'
 import ErrorSnackBar from '../ErrorSnackbar/ErrorSnackBar';
 const CreateQuestion = () => {
-    const DUMMY_CONTEST=[
-        {contestName:'contestA',contestId:'1'},
-        {contestName:'contestB',contestId:'2'},
-        {contestName:'contestC',contestId:'3'},
-        {contestName:'contestD',contestId:'4'}
-    ]
-  
+   
+    const contestId=useParams().cid
     let element=document.getElementById('actual-btn')
     const [open, setOpen] = useState(false);
     const [error,setError]=useState()
     const handleClick = () => {
       setOpen(true);
     };
-  
+    const [csvFile,setcsvFile]=useState()
     const handleClose = (event, reason) => {
       if (reason === 'clickaway') {
         return;
@@ -24,7 +20,7 @@ const CreateQuestion = () => {
       setOpen(false);
     };  
 
-    const [contestId,setContestId]=useState();
+   
     const [image,setImage]=useState([])
     const onChange = (imageList, addUpdateIndex) => {
         // data for submit
@@ -34,17 +30,22 @@ const CreateQuestion = () => {
       const maxNumber=1;
 
       const [options,setOptions]=useState([
-          {optionKey:'',optionValue:''}
+          {option:'',value:''}
       ])
+      //this function is for adding question manually...
       const handleformsubmit=(e)=>{
         e.preventDefault()
           console.log(options,contestId);
 
-          const files = document.getElementById("files");
+          //const files = document.getElementById("files");
           const formData = new FormData();
-          formData.append("files", files);
+          formData.append("question", document.getElementById('quesText').value);
+          formData.append("image",image)
+          formData.append("options",options)
+          formData.append("correctValue",document.getElementById('correctVal').value)
+          formData.append("score",document.getElementById('score').value)
           const url=`${process.env.REACT_APP_BACKEND_URL}signup`
-          fetch(`${process.env.REACT_APP_BACKEND_URL}uploadfile`, {
+          fetch(`${process.env.REACT_APP_BACKEND_URL}questions/${contestId}`, {
             method: 'post',
             body: formData
         })
@@ -52,7 +53,10 @@ const CreateQuestion = () => {
             .catch((err) => ("Error occured", err));
 
       }
-
+      const handleAlternateformsubmit=(e)=>{
+           e.preventDefault();
+      }
+      const [csv,setcsv]=useState(false)
       const optionValueHandler=(i,event,element)=>{
           const values=[...options]
           values[i][element]=event.target.value;
@@ -68,9 +72,18 @@ const CreateQuestion = () => {
       }
     return (
         <div  class="container" >
+
+            <div style={{display:'flex',justifyContent:'center'}} > <span 
+            style={{ backgroundColor:'#6F2D91',borderRadius:'4px', padding:'5px 10px',cursor:'pointer',color:'white',margin:'5px' }}  onClick={()=>setcsv(true)} >Add Questions Manually</span> 
+            <span style={{ backgroundColor:'#6F2D91',borderRadius:'4px',padding:'5px 10px',cursor:'pointer',color:'white',margin:'5px' }}
+              onClick={()=>{setcsv(false)
+               setcsvFile(null)
+              }
+              
+              } >Add Questions via Csv file</span>  </div>
             {open && <ErrorSnackBar  open={open}  handleClick={handleClick} error={error} handleClose={handleClose} />}
-            <form >
-            <div className="formHeader" ><h3>Add a Question</h3></div>
+          { csv && <form >
+            <div className="formHeader" ><h3>Add a Question {!csv ? ' (via Csv)' :' (Manually)'}</h3></div>
                 <div id="contact" >
           <div style={{display:'inline',textAlign:'justify',margin:'10px'}} >
             <ImageUploading
@@ -124,13 +137,13 @@ const CreateQuestion = () => {
           {options.map((val,i)=>(
               <fieldset>
                    <input placeholder="Option Key "
-                    value={val.optionKey}
-                    onChange={(event)=>optionValueHandler(i,event,"optionKey")} 
+                    value={val.option}
+                    onChange={(event)=>optionValueHandler(i,event,"option")} 
                     type="text" tabindex="2" required id="quesText"/>
 
                      <input placeholder="Option value"
-                    value={val.optionValue}
-                    onChange={(event)=>optionValueHandler(i,event,"optionValue")} 
+                    value={val.value}
+                    onChange={(event)=>optionValueHandler(i,event,"value")} 
                     type="text" tabindex="2" required id="quesText"/>
                     <div style={{textAlign:'justify'}} >
                     <button onClick={(i)=>deleteOptionHandler(i)} 
@@ -140,21 +153,12 @@ const CreateQuestion = () => {
           ))}
           <br/><br/>
            
-              <fieldset  style={{textAlign:'justify'}} >
+              {/* <fieldset  style={{textAlign:'justify'}} >
               <input id="actual-btn" type="file" required  hidden />
               <label className="imageBtn" htmlFor="actual-btn" >choose a csv file</label>
                 <span id="file-chosen">{element ? element.value:'No file Chosen' }</span>
-              </fieldset><br/><br/>
-           <fieldset style={{textAlign:'justify'}} >
-            <label>Contest Id</label>
-            <br/>
-          <select className="imageBtn" placeholder="ContestId" value={contestId}
-           onChange={(event)=>setContestId(event.target.value)}>
-            {DUMMY_CONTEST.map((ques,i)=>(
-                <option value={ques.contestId}> {ques.contestName} </option>
-            ))}
-          </select>
-          </fieldset>
+              </fieldset><br/><br/> */}
+       
           <fieldset>
           <input placeholder="Correct Value" type="text" tabindex="2" required id="correctVal"/>
           </fieldset>
@@ -164,7 +168,23 @@ const CreateQuestion = () => {
           <button name="submit" type="submit"   id="contact-submit" onClick={handleformsubmit}>Submit</button>
             <button id="contact-cancel" >Cancel</button>
             </div>
-    </form>
+    </form>}
+    {!csv && 
+    <div class="container">
+             <form>
+             <div className="formHeader" ><h3>Add a Question {!csv ? ' (via Csv)' :' (Manually)'}</h3></div>
+               <div id="contact">
+             <fieldset  style={{textAlign:'justify'}} >
+              <input value={csvFile} onChange={(event)=>setcsvFile(event.target.value)} id="actual-btn" type="file" required  hidden />
+              <label className="imageBtn" htmlFor="actual-btn"  >choose a csv file</label>
+                <span id="file-chosen">{ csvFile &&  `${csvFile}` }</span>
+              </fieldset><br/><br/>
+            <button name="submit" type="submit"   id="contact-submit" onClick={handleAlternateformsubmit}>Submit</button>
+            <button id="contact-cancel" >Cancel</button>
+            </div>
+            </form>
+    </div>
+    }
     </div>
     )
 }

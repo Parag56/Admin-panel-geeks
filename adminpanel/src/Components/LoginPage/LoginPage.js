@@ -4,6 +4,7 @@ import {useHistory} from 'react-router-dom'
 import $ from 'jquery'
 import {AuthContext} from '../Context/Auth-Context'
 import LoginLoader from '../Loader/LoginLoader'
+import ErrorSnackBar from "../ErrorSnackbar/ErrorSnackBar";
 
 function LoginPage() {
 
@@ -13,6 +14,19 @@ function LoginPage() {
     
     const [loading,setloading]=useState(false)
     const auth = useContext(AuthContext);
+    const [open, setOpen] = useState(false);
+    const [error,setError]=useState()
+    const handleClick = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+  
+      setOpen(false);
+    };  
     //handling the password animation and alter input type to password/text
     useEffect(() => {
     const pswInput = document.querySelector("#password");
@@ -43,7 +57,7 @@ function LoginPage() {
     const password = document.getElementById("password").value;
     data.adminemail = email;
     data.adminPassword = password;
-    console.log(data);
+    
 
     const url= `${process.env.REACT_APP_BACKEND_URL}loginadmin`
     console.log(url)
@@ -60,7 +74,10 @@ function LoginPage() {
          console.log(auth.isloggedin)
          history.push("/home")
         },
-        error:()=>{
+        error:(err)=>{
+          console.log(err)
+          setError(err.responseJSON.message)
+          setOpen(true)
           setloading(false)
         }
       
@@ -69,6 +86,7 @@ function LoginPage() {
   };
   return (
     <div className="logindiv">
+      {open && <ErrorSnackBar open={open}  handleClick={handleClick} error={error} handleClose={handleClose} /> }
         {loading&&(
             <LoginLoader/>
         )}

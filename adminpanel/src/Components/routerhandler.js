@@ -27,7 +27,7 @@ function Routerhandler() {
     localStorage.setItem(
       "adminData",
       JSON.stringify({
-        admind: adminid,
+        adminid: adminid,
         token: token,
         adminname: adminname,
         expiration: tokenexpirationdate.toISOString(),
@@ -74,14 +74,46 @@ function Routerhandler() {
       new Date(storeddata.expiration) > new Date()
     ) {
       login(
-        storeddata.admind,
+        storeddata.adminid,
         storeddata.token,
         storeddata.adminname,
         new Date(storeddata.expiration)
       );
     }
   }, []);
+let routes
 
+
+if(token){
+  routes=(
+    <Switch>
+    <Route exact path="/">
+      <LoginPage />
+    </Route>
+  
+    <Route exact path="/home">
+      <PersistentDrawerLeft />
+    </Route>
+    <Route exact path="/questions/:cid">
+      <Questions />
+    </Route>
+    <Route exact path="/registeredusers/:cid">
+      <RegisteredUsers />
+    </Route>
+    <Redirect to="/home" />
+  </Switch>
+  )
+ 
+}
+else{
+  routes=( <Switch>
+     <Route exact path="/">
+      <LoginPage />
+    </Route>
+     <Redirect to="/" />
+   </Switch>
+  )
+ }
   return (
     <AuthContext.Provider
       value={{
@@ -93,23 +125,9 @@ function Routerhandler() {
         logout: logout,
       }}
     >
-      <Router>
-        <Switch>
-          <Route exact path="/">
-            <LoginPage />
-          </Route>
-          {!token && <Redirect to="/" />}
-          <Route exact path="/home">
-            <PersistentDrawerLeft />
-          </Route>
-          <Route exact path="/questions/:cid">
-            <Questions />
-          </Route>
-          <Route exact path="/registeredusers/:cid">
-            <RegisteredUsers />
-          </Route>
-        </Switch>
-      </Router>
+     <Router>
+      {routes}
+     </Router>
     </AuthContext.Provider>
   );
 }

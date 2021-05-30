@@ -6,9 +6,9 @@ import { makeStyles } from '@material-ui/core/styles';
 const ErrorSnackBar = (props) => {
     return (
         <div >
-        <Button variant="outlined" onClick={props.handleClick}>
+        {/* <Button variant="outlined" onClick={props.handleClick}>
           Open success snackbar
-        </Button>
+        </Button> */}
         <Snackbar open={props.open} autoHideDuration={6000} onClose={props.handleClose}>
           <Alert onClose={props.handleClose} elevation={6} variant="filled" severity="error">
             {props.error}

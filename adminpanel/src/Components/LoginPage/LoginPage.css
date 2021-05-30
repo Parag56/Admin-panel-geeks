@@ -18,7 +18,7 @@
 	 left: 0;
 	 width: 100%;
 	 height: 100%;
-	 background-color: #286aaf;
+	 background-color: #6F2D91;
 	 z-index: -1;
 	 display: flex;
 	 overflow: hidden;
@@ -46,7 +46,7 @@
 	 margin: auto;
 	 width: 26rem;
 	 padding: 6rem;
-	 color: #07417d;
+	 color: rgb(98, 24, 128);
 	 background: rgba(255, 255, 255, 0.3);
 	 border-radius: 7rem 0 7rem 0;
 	 backdrop-filter: blur(10px);
@@ -102,7 +102,7 @@
 	 color: #fff;
      position: absolute;
      left: 17%;
-	 background-color: #286aaf;
+	 background-color: #6F2D91;
 	 border-radius: 0.3rem;
 	 cursor: pointer;
 }
