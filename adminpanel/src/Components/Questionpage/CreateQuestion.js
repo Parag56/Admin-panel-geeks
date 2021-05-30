@@ -38,16 +38,20 @@ const CreateQuestion = () => {
           console.log(options,contestId);
 
           //const files = document.getElementById("files");
-          const formData = new FormData();
-          formData.append("question", document.getElementById('quesText').value);
-          formData.append("image",image)
-          formData.append("options",options)
-          formData.append("correctValue",document.getElementById('correctVal').value)
-          formData.append("score",document.getElementById('score').value)
-          const url=`${process.env.REACT_APP_BACKEND_URL}signup`
-          fetch(`${process.env.REACT_APP_BACKEND_URL}questions/${contestId}`, {
+          // const formData = new FormData();
+          // formData.append("question", document.getElementById('quesText').value);
+          // formData.append("image",image)
+          // formData.append("options",options)
+          // formData.append("correctValue",document.getElementById('correctVal').value)
+          // formData.append("score",document.getElementById('score').value)
+          
+          const url=`${process.env.REACT_APP_BACKEND_URL}questions/${contestId}`
+          fetch(`${process.env.REACT_APP_BACKEND_URL}image-upload`, {
             method: 'post',
-            body: formData
+            ContentType:'application/json',
+            body: JSON.stringify({
+              image:image
+            })
         })
             .then((res) => console.log(res))
             .catch((err) => ("Error occured", err));
@@ -165,7 +169,7 @@ const CreateQuestion = () => {
           <fieldset>
             <input placeholder="Score" type="text" tabindex="2" required id="score"/>
           </fieldset>
-          <button name="submit" type="submit"   id="contact-submit" onClick={handleformsubmit}>Submit</button>
+          <button name="submit"   id="contact-submit" onClick={handleformsubmit}>Submit</button>
             <button id="contact-cancel" >Cancel</button>
             </div>
     </form>}
@@ -179,7 +183,7 @@ const CreateQuestion = () => {
               <label className="imageBtn" htmlFor="actual-btn"  >choose a csv file</label>
                 <span id="file-chosen">{ csvFile &&  `${csvFile}` }</span>
               </fieldset><br/><br/>
-            <button name="submit" type="submit"   id="contact-submit" onClick={handleAlternateformsubmit}>Submit</button>
+            <button name="submit"    id="contact-submit" onClick={handleAlternateformsubmit}>Submit</button>
             <button id="contact-cancel" >Cancel</button>
             </div>
             </form>
