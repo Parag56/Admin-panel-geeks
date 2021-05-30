@@ -1,9 +1,11 @@
-import React,{useState} from 'react'
+import React,{useState,useContext} from 'react'
 import {useParams} from 'react-router-dom'
 import ImageUploading from 'react-images-uploading'
 import ErrorSnackBar from '../ErrorSnackbar/ErrorSnackBar';
+import {AuthContext} from '../Context/Auth-Context'
+import $ from 'jquery'
 const CreateQuestion = () => {
-   
+   const auth= useContext(AuthContext)
     const contestId=useParams().cid
     let element=document.getElementById('actual-btn')
     const [open, setOpen] = useState(false);
@@ -46,15 +48,28 @@ const CreateQuestion = () => {
           // formData.append("score",document.getElementById('score').value)
           
           const url=`${process.env.REACT_APP_BACKEND_URL}questions/${contestId}`
-          fetch(`${process.env.REACT_APP_BACKEND_URL}image-upload`, {
-            method: 'post',
-            ContentType:'application/json',
-            body: JSON.stringify({
-              image:image
-            })
-        })
-            .then((res) => console.log(res))
-            .catch((err) => ("Error occured", err));
+          let data={}
+          data.question=document.getElementById('quesText').value
+          data.image=image[0].data_url
+          data.options=options
+          data.correctvalue=document.getElementById('correctVal').value
+          data.score=document.getElementById('score').value
+          console.log(data)
+
+            $.ajax({
+              type: "POST",
+              data: JSON.stringify(data),
+              contentType: "application/json",
+              url,
+              headers: {"Authorization":'Bearer ' + auth.token},
+              success: function (data) {
+                console.log("success");
+                // console.log(JSON.stringify(data));
+              },
+              error: function (error) {
+               console.log(error)
+              },
+            });
 
       }
       const handleAlternateformsubmit=(e)=>{
@@ -67,7 +82,7 @@ const CreateQuestion = () => {
           setOptions(values);
       }
       const addOtherOption=()=>{
-          setOptions([...options, {optionKey:'',optionValue:''}])
+          setOptions([...options,{option:'',value:''}])
       }
       const deleteOptionHandler=(i)=>{
          const values=[...options]
@@ -169,7 +184,7 @@ const CreateQuestion = () => {
           <fieldset>
             <input placeholder="Score" type="text" tabindex="2" required id="score"/>
           </fieldset>
-          <button name="submit"   id="contact-submit" onClick={handleformsubmit}>Submit</button>
+          <button name="submit" type="submit"   id="contact-submit" onClick={handleformsubmit}>Submit</button>
             <button id="contact-cancel" >Cancel</button>
             </div>
     </form>}
@@ -183,7 +198,7 @@ const CreateQuestion = () => {
               <label className="imageBtn" htmlFor="actual-btn"  >choose a csv file</label>
                 <span id="file-chosen">{ csvFile &&  `${csvFile}` }</span>
               </fieldset><br/><br/>
-            <button name="submit"    id="contact-submit" onClick={handleAlternateformsubmit}>Submit</button>
+            <button name="submit" type="submit"   id="contact-submit" onClick={handleAlternateformsubmit}>Submit</button>
             <button id="contact-cancel" >Cancel</button>
             </div>
             </form>
