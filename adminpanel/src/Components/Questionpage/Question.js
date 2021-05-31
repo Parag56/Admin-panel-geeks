@@ -37,6 +37,7 @@ const Question = () => {
         success: function(data) {
           setloading(false)
           setcontests(data.contests)
+          console.log(data)
         },
         error: function(xhr, status, err) {
           setloading(false)
@@ -45,6 +46,7 @@ const Question = () => {
           console.error( status, err.toString());
         }
       })
+      
     },[])
 
    
@@ -62,7 +64,7 @@ const Question = () => {
            <div className="contestcards">
             {!loading&&contests.length!==0&&(
               contests.map((contest)=>{
-                return <Link to={`/questions/${contest.id}`}><ContestCard contestname={contest.Contestname} contestid={contest.id}/></Link>
+                return <Link to={`/questions/${contest.id}`}><ContestCard contestname={contest.contestname} contestid={contest.id}/></Link>
              })
            )}
            </div>

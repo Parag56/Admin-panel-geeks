@@ -8,9 +8,12 @@ import Nulldata from '../Nulldata/Nulldata'
 import $ from 'jquery'
 import CreateQuestion from './CreateQuestion'
 import ErrorSnackBar from '../ErrorSnackbar/ErrorSnackBar'
+import EnhancedTable from '../DataTable/Datatable'
 function Questions() {
     const contestid=useParams().cid
     const [loading,setloading]=useState(true)
+    const [rows,setrows]=useState([])
+    const [headCells,setheadcells]=useState([])
     const [questions,setquestions]=useState([])
     const [formstate,setformstate]=useState(false)
     const [open, setOpen] = useState(false);
@@ -39,6 +42,28 @@ function Questions() {
                 //add questions to questions state
                 setquestions(data)
                 console.log(data)
+
+
+                const headCells = [
+                    
+                    { id: 'question', numeric: true, disablePadding: false, label: 'Question' },
+                    { id: 'correctvalue', numeric: true, disablePadding: false, label: 'CorrectValue' },
+                    { id: 'score', numeric: true, disablePadding: false, label: 'Score'},
+
+                  ];
+                  let Rows=[]
+                  //defining Rows array
+                  data.questions.map(ques=>{
+                    Rows.push({
+                     question:ques.question,
+                     correctvalue:ques.correctvalue,
+                     score:ques.score,
+                    })
+                  })
+                  setrows(Rows);
+                  setheadcells(headCells)
+
+
             },
             error:function(error){
                 //Set Loading sate to false
@@ -68,7 +93,9 @@ function Questions() {
            <CreateQuestion/>
        )}
        {!loading&&!formstate&&questions.length!==0&&(
-           <div>Question table
+           <div>
+               <EnhancedTable  heading="Question" rows={rows} headCells={headCells}  />
+              
            </div>
        )}
         </div>

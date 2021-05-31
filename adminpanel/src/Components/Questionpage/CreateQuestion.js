@@ -38,14 +38,6 @@ const CreateQuestion = () => {
       const handleformsubmit=(e)=>{
         e.preventDefault()
           console.log(options,contestId);
-
-          //const files = document.getElementById("files");
-          // const formData = new FormData();
-          // formData.append("question", document.getElementById('quesText').value);
-          // formData.append("image",image)
-          // formData.append("options",options)
-          // formData.append("correctValue",document.getElementById('correctVal').value)
-          // formData.append("score",document.getElementById('score').value)
           
           const url=`${process.env.REACT_APP_BACKEND_URL}questions/${contestId}`
           let data={}
@@ -75,7 +67,7 @@ const CreateQuestion = () => {
       const handleAlternateformsubmit=(e)=>{
            e.preventDefault();
       }
-      const [csv,setcsv]=useState(false)
+      const [csv,setcsv]=useState(true)
       const optionValueHandler=(i,event,element)=>{
           const values=[...options]
           values[i][element]=event.target.value;
@@ -165,7 +157,7 @@ const CreateQuestion = () => {
                     onChange={(event)=>optionValueHandler(i,event,"value")} 
                     type="text" tabindex="2" required id="quesText"/>
                     <div style={{textAlign:'justify'}} >
-                    <button onClick={(i)=>deleteOptionHandler(i)} 
+                    <button onClick={()=>deleteOptionHandler(i)} 
                     className="imageBtn" style={{backgroundColor:'red'}} > Delete</button>
                     </div>
               </fieldset>
@@ -184,7 +176,7 @@ const CreateQuestion = () => {
           <fieldset>
             <input placeholder="Score" type="text" tabindex="2" required id="score"/>
           </fieldset>
-          <button name="submit" type="submit"   id="contact-submit" onClick={handleformsubmit}>Submit</button>
+          <button name="submit" type="submit"  id="contact-submit" onClick={handleformsubmit}>Submit</button>
             <button id="contact-cancel" >Cancel</button>
             </div>
     </form>}

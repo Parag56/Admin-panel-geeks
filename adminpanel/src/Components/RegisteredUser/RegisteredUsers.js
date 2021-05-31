@@ -5,8 +5,11 @@ import Loader from '../Loader/Loader'
 import Nulldata from '../Nulldata/Nulldata'
 import './Registereduser.css'
 import $ from 'jquery'
+import EnhancedTable from '../DataTable/Datatable'
 function RegisteredUsers() {
     const contestid=useParams().cid
+    const [rows,setrows]=useState([])
+    const [headCells,setheadcells]=useState([])
     const [loading,setloading]=useState(true)
     const [registeredusers,setregisteredusers]=useState([])
       //Fetching all the  Registered Users of the contest
@@ -22,6 +25,33 @@ function RegisteredUsers() {
                   setloading(false)
                   //add registeredusers to registeredusers state
                   setregisteredusers(data.data)
+
+                  const headcells = [
+                    { id: 'email', numeric: false, disablePadding: true, label: 'Email' },
+                    { id: 'name', numeric: true, disablePadding: false, label: 'Name' },
+                    { id: 'id', numeric: true, disablePadding: false, label: 'Id' },
+                    { id: 'uploadimage', numeric: true, disablePadding: false, label: 'Upload Image' },
+                    { id: 'phoneno', numeric: true, disablePadding: false, label: 'Phone Number'},
+                    {id: 'college', numeric: true, disablePadding: false, label: 'College'},
+                    {  id:'year', numeric: true, disablePadding: false, label: 'Year'},
+                    { id: 'branch', numeric: true, disablePadding: false, label: 'Branch'} ,
+                  ];
+                  let Rows=[]
+                  //defining Rows array
+                  data.registeredusers.map(user=>{
+                    Rows.push({
+                      email:user.email,
+                      name:user.name,
+                      id:user.id,
+                      phoneno:user.phoneno,
+                      college:user.college,
+                      year:user.year,
+                      branch:user.branch,
+                    })
+                  })
+                  setrows(Rows);
+                  setheadcells(headcells)
+
               },
               error:function(error){
                   //Set Loading sate to false
@@ -44,7 +74,8 @@ function RegisteredUsers() {
        )}
        </div>
        {!loading&&registeredusers.length!==0&&(
-           <div>Question table
+           <div> 
+               <EnhancedTable heading="RegisteredUsers" rows={rows} headCells={headCells} />
            </div>
        )}
         </div>

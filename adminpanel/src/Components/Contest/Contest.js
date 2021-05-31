@@ -4,6 +4,7 @@ import Loader from '../Loader/Loader'
 import Nulldata from '../Nulldata/Nulldata'
 import CreateContest from './CreateContest'
 import $ from 'jquery'
+import EnhancedTable from '../DataTable/Datatable'
 function Contest(){
     const [loading,setloading]=useState(true)
     const [contestdata,setcontestdata]=useState([])
@@ -20,33 +21,35 @@ function Contest(){
         success: function(data) {
         //   console.log(data)
           setloading(false)
-        //   setcontestdata(data.contests)
-        //   const headCells = [
-        //     // { id: 'idx', numeric: false, disablePadding: true, label: 'Email' },
-        //     { id: 'email', numeric: false, disablePadding: true, label: 'Email' },
-        //     { id: 'name', numeric: true, disablePadding: false, label: 'Name' },
-        //     { id: 'id', numeric: true, disablePadding: false, label: 'Id' },
-        //     { id: 'uploadimage', numeric: true, disablePadding: false, label: 'Upload Image' },
-        //     { id: 'phoneno', numeric: true, disablePadding: false, label: 'Phone Number'},
-        //     {id: 'college', numeric: true, disablePadding: false, label: 'College'},
-        //     {  id:'year', numeric: true, disablePadding: false, label: 'Year'},
-        //     { id: 'branch', numeric: true, disablePadding: false, label: 'Branch'} ,
-        //   ];
-        //   let Rows=[]
-        //   data.users.map(user=>{
-        //     Rows.push({
-        //       email:user.email,
-        //       name:user.name,
-        //       id:user.id,
-        //       uploadimage:user.profilePhotoLocation,
-        //       phoneno:user.phoneno,
-        //       college:user.college,
-        //       year:user.year,
-        //       branch:user.Branch,
-        //     })
-        //   })
-        //   setrows(Rows);
-        //   setheadcells(headCells)
+          console.log(data)
+          setcontestdata(data.contests)
+          const headCells = [
+            // { id: 'idx', numeric: false, disablePadding: true, label: 'Email' },
+          
+            { id: 'contestname', numeric: true, disablePadding: false, label: 'Contestname' },
+            { id: 'contestduration', numeric: true, disablePadding: false, label: 'Contest Durations' },
+            { id: 'starttime', numeric: true, disablePadding: false, label: 'Start Time' },
+            { id: 'endtime', numeric: true, disablePadding: false, label: 'End Time' },
+            { id: 'contesttype', numeric: true, disablePadding: false, label: 'Contest Type' },
+            { id: 'noofquestions', numeric: true, disablePadding: false, label: 'No of Questions'},
+            {id: 'totalslots', numeric: true, disablePadding: false, label: 'Total Slots'},
+            {  id:'slotstrength', numeric: true, disablePadding: false, label: 'Slot Strength'},
+          ];
+          let Rows=[]
+          data.contests.map(contest=>{
+            Rows.push({
+              contestname:contest.contestname,
+              contestduration:contest.contestduration,
+              starttime:contest.starttime,
+              endtime:contest.endtime,
+              contesttype:contest.contesttype,
+              noofquestions:contest.noofquestions,
+              totalslots:contest.totalslots.length,
+              slotstrength:contest.slotstrength,
+            })
+          })
+          setrows(Rows);
+          setheadcells(headCells)
         },
         error: function(xhr, status, err) {
           setloading(false)
@@ -65,8 +68,11 @@ function Contest(){
             {!loading && contestdata.length===0&&!formstate&&(
                 <Nulldata setformstate={setformstate} required="true"/>
             )}
+            {!loading && contestdata.length>0 &&(
+                <EnhancedTable heading="Contest" rows={rows} headCells={headCells} />
+            )}
               {formstate&&(
-           <div>
+             <div>
             <CreateContest setformstate={setformstate}/>
              </div>
          )}

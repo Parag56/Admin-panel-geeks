@@ -24,7 +24,7 @@ font-family: 'Courier New', Courier, monospace;
 transition: all .2s;
 }
 .contestcards a:hover{
-    color: teal;
+    color: #6F2D91;
     background-color: white;
     box-shadow: 1px 0px 10px rgba(0,0,0,.4);
 }

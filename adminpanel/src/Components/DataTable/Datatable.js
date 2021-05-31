@@ -25,6 +25,7 @@ import ContestDataTable from '../Contest/ContestDataTable';
 import RegisteredUserTable from '../RegisteredUser/RegisteredUserTable'
 import PendingUserTable from '../PendingUser/PendingUserTable';
 import AdminTable from '../Admin/AdminTable';
+import QuestionDataTable from '../Questionpage/QuestionDataTable';
 
 // function createData(email,name,id,uploadimage,phoneno,college,year,branch) {
 //   return { email,name,id,uploadimage,phoneno,college,year,branch};
@@ -322,7 +323,8 @@ export default function EnhancedTable(props) {
                        {props.heading==='RegisteredUsers' && 
                         <RegisteredUserTable row={row} isItemSelected={isItemSelected} labelId={labelId}   />
                        }
-                       {props.heading==='Question'}
+                       {props.heading==='Question'  &&
+                        <QuestionDataTable  row={row} isItemSelected={isItemSelected} labelId={labelId}  />   }
                        {props.heading==='pendingUsers' &&
                         <PendingUserTable row={row} isItemSelected={isItemSelected} labelId={labelId}  /> }
                         {props.heading==='admins' && <AdminTable row={row} isItemSelected={isItemSelected} labelId={labelId} /> }
