@@ -47,7 +47,7 @@ const Question = () => {
         }
       })
       
-    },[])
+    },[loading])
 
    
     return (

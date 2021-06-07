@@ -1,4 +1,5 @@
-import React from 'react';
+import React,{useState} from 'react';
+import $ from 'jquery'
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -26,7 +27,10 @@ import RegisteredUserTable from '../RegisteredUser/RegisteredUserTable'
 import PendingUserTable from '../PendingUser/PendingUserTable';
 import AdminTable from '../Admin/AdminTable';
 import QuestionDataTable from '../Questionpage/QuestionDataTable';
-
+import {AuthContext} from '../Context/Auth-Context'
+import ErrorSnackBar from '../ErrorSnackbar/ErrorSnackBar';
+import Loader from '../Loader/Loader'
+// import {deleteByIdReq} from '../User/UserDataTable'
 // function createData(email,name,id,uploadimage,phoneno,college,year,branch) {
 //   return { email,name,id,uploadimage,phoneno,college,year,branch};
 // }
@@ -73,6 +77,8 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
+
+
 // const headCells = [
 //   { id: 'name', numeric: false, disablePadding: true, label: 'Dessert (100g serving)' },
 //   { id: 'calories', numeric: true, disablePadding: false, label: 'Calories' },
@@ -86,43 +92,49 @@ function EnhancedTableHead(props) {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
+  
+
+    return (
     
-  return (
-    <TableHead>
-      <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ 'aria-label': 'select all desserts' }}
-          />
-        </TableCell>
-        {props.headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'default'}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <span className={classes.visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </span>
-              ) : null}
-            </TableSortLabel>
+      <TableHead>
+        <TableRow>
+          <TableCell padding="checkbox">
+            <Checkbox
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={rowCount > 0 && numSelected === rowCount}
+              onChange={onSelectAllClick}
+              inputProps={{ 'aria-label': 'select all desserts' }}
+            />
           </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
+          {props.headCells.map((headCell) => (
+            <TableCell
+              key={headCell.id}
+              align={headCell.numeric ? 'right' : 'left'}
+              padding={headCell.disablePadding ? 'none' : 'default'}
+              sortDirection={orderBy === headCell.id ? order : false}
+            >
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : 'asc'}
+                onClick={createSortHandler(headCell.id)}
+              >
+                {headCell.label}
+                {orderBy === headCell.id ? (
+                  <span className={classes.visuallyHidden}>
+                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  </span>
+                ) : null}
+              </TableSortLabel>
+            </TableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+    
+    );
+  }
+    
+  
+
 
 EnhancedTableHead.propTypes = {
   classes: PropTypes.object.isRequired,
@@ -154,10 +166,12 @@ const useToolbarStyles = makeStyles((theme) => ({
   },
 }));
 
+
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
   const { numSelected } = props;
-
+  
+  
   return (
     <Toolbar
       className={clsx(classes.root, {
@@ -173,11 +187,12 @@ const EnhancedTableToolbar = (props) => {
           {props.heading}
         </Typography>
       )}
+     
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton aria-label="delete">
-            <DeleteIcon />
+          <IconButton aria-label="delete" >
+            <DeleteIcon  onClick={props.deleteByIdReq} />
           </IconButton>
         </Tooltip>
       ) : (
@@ -192,6 +207,11 @@ const EnhancedTableToolbar = (props) => {
 };
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
+  onRequestSort: PropTypes.func.isRequired,
+  onSelectAllClick: PropTypes.func.isRequired,
+  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  orderBy: PropTypes.string.isRequired,
+  rowCount: PropTypes.number.isRequired,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -219,14 +239,76 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function EnhancedTable(props) {
+
+
   const classes = useStyles();
+  const auth=React.useContext(AuthContext)
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  
+   //functions and states for error snackbar
+   const [open, setOpen] = useState(false);
+   const [error,setError]=useState()
+   const handleClickDelete = () => {
+     setOpen(true);
+   };
+ 
+   const handleClose = (event, reason) => {
+     if (reason === 'clickaway') {
+       return;
+     }
+ 
+     setOpen(false);
+   };  
+  //functions and states for error snackbar
 
+  //function for delete request request for all types...
+  const deleteByIdReq=()=>{
+   
+      // delete request...
+    
+      console.log(props.loading)
+      props.setloading(true)
+      
+      const url=`${process.env.REACT_APP_BACKEND_URL}delete${props.heading}`
+      const data={ids:[]}
+      data.ids=selected
+      console.log(data)
+      $.ajax({
+       type: "DELETE",
+       data: JSON.stringify(data),
+       contentType: "application/json",
+       url,
+       headers: {"Authorization":'Bearer ' + auth.token},
+       success: function (data) {
+         console.log("success");
+        
+         setError('deletion Successful')
+         setOpen(true)
+         props.setloading(false)
+         if(props.heading=='contest' || props.heading=='questions'){
+           props.setformstate(true)
+           props.setformstate(false)
+           props.setOpenSuccess(true)
+           props.setSuccessMessage('deletion successful')
+         }
+         // console.log(JSON.stringify(data));
+       },
+       error: function (error) {
+        console.log(error)
+        props.setloading(false)
+       setError('deletion Unsuccessful')
+       setOpen(true)
+       },
+     });
+
+
+    }
+    //function for delete request request for all types...
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -279,8 +361,9 @@ export default function EnhancedTable(props) {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar heading={props.heading} numSelected={selected.length} />
+        <EnhancedTableToolbar heading={props.heading} numSelected={selected.length}  deleteByIdReq={deleteByIdReq} />
         <TableContainer>
+          
           <Table
             className={classes.table}
             aria-labelledby="tableTitle"
@@ -314,20 +397,23 @@ export default function EnhancedTable(props) {
                       key={row.name}
                       selected={isItemSelected}
                     >
-                    
+                      {props.loading && <Loader />}
+                       { open &&
+                        <ErrorSnackBar  open={open}  handleClick={handleClickDelete} error={error} 
+                        handleClose={handleClose} /> }
 
-                     { props.heading==='Users' &&
-                       <UserDataTable row={row} isItemSelected={isItemSelected} labelId={labelId} />}
-                       {props.heading==='Contest' && 
+                     { props.heading==='user' &&
+                       <UserDataTable   row={row} isItemSelected={isItemSelected}  selected={selected} labelId={labelId} />}
+                       {props.heading==='contest' && 
                        <ContestDataTable row={row} isItemSelected={isItemSelected} labelId={labelId} /> }
                        {props.heading==='RegisteredUsers' && 
                         <RegisteredUserTable row={row} isItemSelected={isItemSelected} labelId={labelId}   />
                        }
-                       {props.heading==='Question'  &&
+                       {props.heading==='questions'  &&
                         <QuestionDataTable  row={row} isItemSelected={isItemSelected} labelId={labelId}  />   }
-                       {props.heading==='pendingUsers' &&
+                       {props.heading==='pendinguser' &&
                         <PendingUserTable row={row} isItemSelected={isItemSelected} labelId={labelId}  /> }
-                        {props.heading==='admins' && <AdminTable row={row} isItemSelected={isItemSelected} labelId={labelId} /> }
+                        {props.heading==='admin' && <AdminTable row={row} isItemSelected={isItemSelected} labelId={labelId} /> }
                     </TableRow>
                   );
                 })}

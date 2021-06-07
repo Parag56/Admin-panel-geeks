@@ -5,12 +5,31 @@ import Nulldata from '../Nulldata/Nulldata'
 import CreateContest from './CreateContest'
 import $ from 'jquery'
 import EnhancedTable from '../DataTable/Datatable'
+import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar'
+import { CSVLink, CSVDownload } from "react-csv";
 function Contest(){
     const [loading,setloading]=useState(true)
     const [contestdata,setcontestdata]=useState([])
     const [headCells,setheadcells]=useState([])
     const [rows,setrows]=useState([])
     const [formstate,setformstate]=useState(false)
+    const [q,setQ]=useState("")
+    const [filterstate,setFilterState]=useState("")
+     //success snackbar functions..
+     const [opensuccess, setOpenSuccess] = useState(false);
+     const [successmessage,setSuccessMessage]=useState()
+     const handleClickSuccess = () => {
+       setOpenSuccess(true);
+     };
+     
+     const handleCloseSuccess = (event, reason) => {
+       if (reason === 'clickaway') {
+         return;
+       }
+   
+       setOpenSuccess(false);
+     };  
+     //success snackbar functions..
     useEffect(()=>{
         setloading(true)
      const url=`${process.env.REACT_APP_BACKEND_URL}contests`
@@ -25,8 +44,8 @@ function Contest(){
           setcontestdata(data.contests)
           const headCells = [
             // { id: 'idx', numeric: false, disablePadding: true, label: 'Email' },
-          
-            { id: 'contestname', numeric: true, disablePadding: false, label: 'Contestname' },
+            { id: 'name', numeric: false, disablePadding: false, label: 'ContestId' },
+            { id: 'contestname', numeric: false, disablePadding: false, label: 'Contestname' },
             { id: 'contestduration', numeric: true, disablePadding: false, label: 'Contest Durations' },
             { id: 'starttime', numeric: true, disablePadding: false, label: 'Start Time' },
             { id: 'endtime', numeric: true, disablePadding: false, label: 'End Time' },
@@ -38,6 +57,7 @@ function Contest(){
           let Rows=[]
           data.contests.map(contest=>{
             Rows.push({
+              name:contest.id,
               contestname:contest.contestname,
               contestduration:contest.contestduration,
               starttime:contest.starttime,
@@ -56,24 +76,54 @@ function Contest(){
           console.error( status, err.toString());
         }
      })
-    },[])
+    },[formstate])
+//filter function...
+const filterFields=["contestname","contesttype","slotstrength","starttime"]
+const search=(rows)=>{
+  if(filterstate=="")
+   return rows
 
+   if(filterstate=="contestname")
+   return rows.filter(r=>r.contestname.toLowerCase().indexOf(q)==0 )
+
+   if(filterstate=="contesttype")
+   return rows.filter(r=>r.contesttype.toLowerCase().indexOf(q)==0 )
+
+   if(filterstate=="slotstrength")
+   return rows.filter(r=>r.slotstrength!=null).filter(r=>r.slotstrength.indexOf(q)==0) 
+
+   if(filterstate=="starttime")
+   return rows.filter(r=>r.starttime!=null).filter(r=>r.starttime.toLowerCase().indexOf(q)==0) 
+
+}
+
+//filter function...
 
     return (
         <div>
-            <Header listsize={contestdata.length} setformstate={setformstate} setloading={setloading} required="true"/>
+            <Header listsize={contestdata.length} filterFields={filterFields} 
+            filterstate={filterstate} setFilterState={setFilterState} setformstate={setformstate}
+             setloading={setloading} required="true"/>
+               <div style={{ display:'flex', justifyContent:'space-between',padding:'5px',margin:'10px' }} >
+           <CSVLink data={rows}  filename={"Contests.csv"}  ><button className="imageBtn" >Export Csv</button> 
+           </CSVLink>
+           <input style={{height:'40px' }} type="text" placeholder="Search here..." value={q} onChange={(e)=>setQ(e.target.value)} />
+           </div> 
+            {opensuccess &&  <SuccessSnackBar open={opensuccess} handleClick={handleClickSuccess} successmessage={successmessage} handleClose={handleCloseSuccess} /> }
             {loading &&!formstate&& (
                 <Loader />
             )}
             {!loading && contestdata.length===0&&!formstate&&(
                 <Nulldata setformstate={setformstate} required="true"/>
             )}
-            {!loading && contestdata.length>0 &&(
-                <EnhancedTable heading="Contest" rows={rows} headCells={headCells} />
+            {!loading &&  !formstate && contestdata.length>0 &&(
+                <EnhancedTable heading="contest" loading={loading} setloading={setloading}
+                setformstate={setformstate} rows={search(rows)} headCells={headCells} />
             )}
               {formstate&&(
              <div>
-            <CreateContest setformstate={setformstate}/>
+            <CreateContest  setloading={setloading} setOpenSuccess={setOpenSuccess} 
+            setSuccessMessage={setSuccessMessage}  setformstate={setformstate}/>
              </div>
          )}
         </div>

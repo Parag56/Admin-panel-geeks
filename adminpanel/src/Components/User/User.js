@@ -6,12 +6,16 @@ import Nulldata from '../Nulldata/Nulldata'
 import './User.css'
 import EnhancedTable from '../DataTable/Datatable'
 import CreateUser from './Createuser'
+import { CSVLink, CSVDownload } from "react-csv";
+
 function User() {
     const [loading,setloading]=useState(true)
     const [userdata,setuserdata]=useState([])
     const [headCells,setheadcells]=useState([])
     const [rows,setrows]=useState([])
     const [formstate,setformstate]=useState(false)
+    const [q,setQ]=useState("")
+    const [filterstate,setFilterState]=useState("")
     useEffect(()=>{
         const url=`${process.env.REACT_APP_BACKEND_URL}users`
         $.ajax({
@@ -21,7 +25,8 @@ function User() {
             success: function(data) {
               // console.log(data)
               setloading(false)
-              setuserdata(data.users)
+             
+               setuserdata(data.users)
 
               //defining headcells array
               const headCells = [
@@ -38,9 +43,10 @@ function User() {
               //defining Rows array
               data.users.map(user=>{
                 Rows.push({
-                  email:user.email,
-                  name:user.name,
                   id:user.id,
+                  email:user.email,
+                  username:user.name,
+                  name:user.id,
                   uploadimage:user.profilePhotoLocation,
                   phoneno:user.phoneno,
                   college:user.college,
@@ -58,9 +64,45 @@ function User() {
           });
     },[]) 
 
+   //filter function...
+   const filterFields=["username","email","college","year","branch"]
+   const search=(rows)=>{
+     if(filterstate=="")
+      return rows
+
+      if(filterstate=="username")
+      return rows.filter(r=>r.username.toLowerCase().indexOf(q)==0 )
+
+      if(filterstate=="email")
+      return rows.filter(r=>r.email.toLowerCase().indexOf(q)==0 )
+
+      if(filterstate=="phoneno")
+      return rows.filter(r=>r.phoneno!=null).filter(r=>r.phoneno.indexOf(q)==0) 
+
+      if(filterstate=="college")
+      return rows.filter(r=>r.college!=null).filter(r=>r.college.toLowerCase().indexOf(q)==0) 
+
+      if(filterstate=="year")
+      return rows.filter(r=>r.year!=null).filter(r=>r.year.toLowerCase().indexOf(q)==0) 
+      if(filterstate=="branch")
+      return rows.filter(r=>r.branch!=null).filter(r=>r.branch.toLowerCase().indexOf(q)==0) 
+   }
+
+   //filter function...
+
+ 
     return (
         <div className="user__page">
-          <Header  listsize={userdata.length} setformstate={setformstate} setloading={setloading} required="true"/>
+          <Header  listsize={userdata.length} filterFields={filterFields} filterstate={filterstate} setFilterState={setFilterState} setformstate={setformstate} setloading={setloading} required="true"/>
+         {/* <fieldset style={{textAlign:'end'}}  > 
+           <input style={{height:'50px'}} type="text" placeholder="select filter field" value={q} onChange={(e)=>setQ(e.target.value)} />
+           </fieldset>  */}
+         <div style={{ display:'flex', justifyContent:'space-between',padding:'5px',margin:'10px' }} >
+           <CSVLink data={rows}  filename={"userdata.csv"}  ><button className="imageBtn" >Export Csv</button> 
+           </CSVLink>
+           <input style={{height:'40px' }} type="text" placeholder="Search here..." value={q} onChange={(e)=>setQ(e.target.value)} />
+           </div> 
+          {/* <CSVDownload data={csvData} target="_blank" />; */}
          {loading&&!formstate&&(
            <Loader/>
          )}
@@ -74,7 +116,7 @@ function User() {
          )}
          {!loading&&userdata.length!=0&&!formstate&&(
            <div>
-             <EnhancedTable heading="Users" headCells={headCells} rows={rows} />
+             <EnhancedTable heading="user" headCells={headCells} rows={search(rows)} />
              </div>
          )}
         </div>

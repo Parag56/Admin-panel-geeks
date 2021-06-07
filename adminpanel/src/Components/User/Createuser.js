@@ -2,8 +2,22 @@ import React,{useState} from 'react'
 import './CreateUser.css'
 import ImageUploading from 'react-images-uploading'
 import $ from 'jquery'
+import ErrorSnackBar from '../ErrorSnackbar/ErrorSnackBar'
 function Createuser({setformstate}) {
   const [image,setImage]=useState([])
+  const [open, setOpen] = useState(false);
+  const [error,setError]=useState()
+  const handleClick = () => {
+    setOpen(true);
+  };
+  
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };  
   //console.log(image);
        const handleformsubmit=(e)=>{
          e.preventDefault()
@@ -12,7 +26,7 @@ function Createuser({setformstate}) {
            data.email=document.getElementById('email-val').value
            data.name=document.getElementById('name-val').value
            data.phoneno=document.getElementById('phone-val').value
-           data.imageUrl=image[0]
+           data.imageUrl=image.length==0?null:image[0].data_url
            data.college=document.getElementById('college-val').value
            data.Branch=document.getElementById('branch-val').value
            data.year=document.getElementById('year-val').value
@@ -30,6 +44,8 @@ function Createuser({setformstate}) {
             },
             error: function (error) {
              console.log(error)
+             setError(error.responseJSON.message)
+             setOpen(true)
             },
           });
        }
@@ -47,7 +63,7 @@ function Createuser({setformstate}) {
     return (
         
         <div class="container">  
-     
+         {open && <ErrorSnackBar  open={open}  handleClick={handleClick} error={error} handleClose={handleClose} />}
         <form   onSubmit={handleformsubmit}>
           <div className="formHeader" ><h3>Create a New User</h3></div>
           <div id="contact">
@@ -58,7 +74,7 @@ function Createuser({setformstate}) {
             <input placeholder="Name" type="text" tabindex="2" required id="name-val"/>
           </fieldset>
           <fieldset>
-            <input placeholder="Phone Number" type="tel" tabindex="3" required id="phone-val"/>
+            <input placeholder="Phone Number" type="tel" tabindex="3"  id="phone-val"/>
           </fieldset>
            
           <div clasName="imageUploaderMenu" style={{display:'inline',textAlign:'justify',margin:'10px'}} >
@@ -106,13 +122,13 @@ function Createuser({setformstate}) {
     </div>
           
           <fieldset>
-            <input placeholder="College" type="text" tabindex="4" required id="college-val"/>
+            <input placeholder="College" type="text" tabindex="4"  id="college-val"/>
           </fieldset>
           <fieldset> 
-          <input placeholder="Year" type="text" tabindex="4" required id="year-val"/>
+          <input placeholder="Year" type="text" tabindex="4"  id="year-val"/>
           </fieldset>
           <fieldset>
-          <input placeholder="Branch" type="text" tabindex="4" required id="branch-val"/>
+          <input placeholder="Branch" type="text" tabindex="4"  id="branch-val"/>
           </fieldset>
           <fieldset>
           <input placeholder="Password" type="text" tabindex="4" required id="pass-val"/>

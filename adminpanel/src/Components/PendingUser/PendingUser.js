@@ -63,9 +63,10 @@ const PendingUser = () => {
             },
             error: function(xhr, status, err) {
               setloading(false)
-              setError(err.message)
+              console.log(err)
+              setError(err)
               setOpen(true)
-              console.error( status, err.toString());
+              //console.error( status, err.toString());
             }
          })
      },[])

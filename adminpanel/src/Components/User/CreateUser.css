@@ -145,7 +145,6 @@ fieldset {
   justify-content: left;
   display:inline;
   text-align: justify;
-  
   margin:20px;
 }
 .upload__image-wrapper{
@@ -154,7 +153,8 @@ fieldset {
 }
 .imageBtn{
   cursor: pointer;
-  width: 20%;
+  
+  width:auto;
   border: none;
   background: #6F2D91;
   color: #FFF;

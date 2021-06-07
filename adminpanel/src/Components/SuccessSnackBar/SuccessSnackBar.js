@@ -1,17 +1,15 @@
 import React from 'react'
-import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
-import { makeStyles } from '@material-ui/core/styles';
-const ErrorSnackBar = (props) => {
+const SuccessSnackBar = (props) => {
     return (
         <div >
         {/* <Button variant="outlined" onClick={props.handleClick}>
           Open success snackbar
         </Button> */}
         <Snackbar open={props.open} autoHideDuration={6000} onClose={props.handleClose}>
-          <Alert onClose={props.handleClose} elevation={6} variant="filled" severity="error">
-            {props.error}
+          <Alert onClose={props.handleClose} elevation={6} variant="filled" severity="success">
+            {props.successmessage}
           </Alert>
         
         </Snackbar>
@@ -23,4 +21,4 @@ const ErrorSnackBar = (props) => {
     )
 }
 
-export default ErrorSnackBar
+export default SuccessSnackBar

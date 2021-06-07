@@ -4,16 +4,20 @@ import ImageUploading from 'react-images-uploading'
 import ErrorSnackBar from '../ErrorSnackbar/ErrorSnackBar';
 import {AuthContext} from '../Context/Auth-Context'
 import $ from 'jquery'
-const CreateQuestion = () => {
+import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar';
+const CreateQuestion = (props) => {
    const auth= useContext(AuthContext)
     const contestId=useParams().cid
+    const [csvFile,setcsvFile]=useState()
+    const [corrval,setcorrval]=useState()
     let element=document.getElementById('actual-btn')
+    //error snackbar functions..
     const [open, setOpen] = useState(false);
     const [error,setError]=useState()
     const handleClick = () => {
       setOpen(true);
     };
-    const [csvFile,setcsvFile]=useState()
+    
     const handleClose = (event, reason) => {
       if (reason === 'clickaway') {
         return;
@@ -21,6 +25,7 @@ const CreateQuestion = () => {
   
       setOpen(false);
     };  
+    
 
    
     const [image,setImage]=useState([])
@@ -32,7 +37,7 @@ const CreateQuestion = () => {
       const maxNumber=1;
 
       const [options,setOptions]=useState([
-          {option:'',value:''}
+           //{option:'',value:''}
       ])
       //this function is for adding question manually...
       const handleformsubmit=(e)=>{
@@ -42,9 +47,10 @@ const CreateQuestion = () => {
           const url=`${process.env.REACT_APP_BACKEND_URL}questions/${contestId}`
           let data={}
           data.question=document.getElementById('quesText').value
-          data.image=image[0].data_url
+          data.image= image.length==0?null:image[0].data_url
           data.options=options
-          data.correctvalue=document.getElementById('correctVal').value
+          // data.correctvalue=document.getElementById('correctVal').value
+          data.correctvalue=corrval
           data.score=document.getElementById('score').value
           console.log(data)
 
@@ -57,9 +63,15 @@ const CreateQuestion = () => {
               success: function (data) {
                 console.log("success");
                 // console.log(JSON.stringify(data));
+                props.setSuccessMessage('Question created successfully')
+                props.setOpenSuccess(true)
+                props.setformstate(false);
               },
               error: function (error) {
-               console.log(error)
+                console.log(error)
+                setError(error.responseJSON.message)
+                setOpen(true)
+               
               },
             });
 
@@ -82,8 +94,10 @@ const CreateQuestion = () => {
          setOptions(values);
       }
     return (
+        <React.Fragment>
+          
         <div  class="container" >
-
+           
             <div style={{display:'flex',justifyContent:'center'}} > <span 
             style={{ backgroundColor:'#6F2D91',borderRadius:'4px', padding:'5px 10px',cursor:'pointer',color:'white',margin:'5px' }}  onClick={()=>setcsv(true)} >Add Questions Manually</span> 
             <span style={{ backgroundColor:'#6F2D91',borderRadius:'4px',padding:'5px 10px',cursor:'pointer',color:'white',margin:'5px' }}
@@ -92,8 +106,10 @@ const CreateQuestion = () => {
               }
               
               } >Add Questions via Csv file</span>  </div>
+             
+            { csv && <form onSubmit={handleformsubmit} >
+             
             {open && <ErrorSnackBar  open={open}  handleClick={handleClick} error={error} handleClose={handleClose} />}
-          { csv && <form >
             <div className="formHeader" ><h3>Add a Question {!csv ? ' (via Csv)' :' (Manually)'}</h3></div>
                 <div id="contact" >
           <div style={{display:'inline',textAlign:'justify',margin:'10px'}} >
@@ -138,65 +154,74 @@ const CreateQuestion = () => {
                 )}
             </ImageUploading>
     </div>
-          <fieldset>
-            <input placeholder="Question " type="text" tabindex="2" required id="quesText"/>
-          </fieldset>
-          <div style={{textAlign:'justify',margin:'20px',marginLeft:'0px'}} >
-          <label>Options</label><br/>
-          <button onClick={addOtherOption}  className="imageBtn" >Add Option</button>
-          </div>
-          {options.map((val,i)=>(
               <fieldset>
-                   <input placeholder="Option Key "
-                    value={val.option}
-                    onChange={(event)=>optionValueHandler(i,event,"option")} 
-                    type="text" tabindex="2" required id="quesText"/>
-
-                     <input placeholder="Option value"
-                    value={val.value}
-                    onChange={(event)=>optionValueHandler(i,event,"value")} 
-                    type="text" tabindex="2" required id="quesText"/>
-                    <div style={{textAlign:'justify'}} >
-                    <button onClick={()=>deleteOptionHandler(i)} 
-                    className="imageBtn" style={{backgroundColor:'red'}} > Delete</button>
-                    </div>
+                <input placeholder="Question " type="text" tabindex="2" required id="quesText"/>
               </fieldset>
-          ))}
-          <br/><br/>
-           
-              {/* <fieldset  style={{textAlign:'justify'}} >
-              <input id="actual-btn" type="file" required  hidden />
-              <label className="imageBtn" htmlFor="actual-btn" >choose a csv file</label>
-                <span id="file-chosen">{element ? element.value:'No file Chosen' }</span>
-              </fieldset><br/><br/> */}
-       
-          <fieldset>
-          <input placeholder="Correct Value" type="text" tabindex="2" required id="correctVal"/>
-          </fieldset>
-          <fieldset>
-            <input placeholder="Score" type="text" tabindex="2" required id="score"/>
-          </fieldset>
-          <button name="submit" type="submit"  id="contact-submit" onClick={handleformsubmit}>Submit</button>
-            <button id="contact-cancel" >Cancel</button>
-            </div>
-    </form>}
-    {!csv && 
-    <div class="container">
-             <form>
-             <div className="formHeader" ><h3>Add a Question {!csv ? ' (via Csv)' :' (Manually)'}</h3></div>
-               <div id="contact">
-             <fieldset  style={{textAlign:'justify'}} >
-              <input value={csvFile} onChange={(event)=>setcsvFile(event.target.value)} id="actual-btn" type="file" required  hidden />
-              <label className="imageBtn" htmlFor="actual-btn"  >choose a csv file</label>
-                <span id="file-chosen">{ csvFile &&  `${csvFile}` }</span>
-              </fieldset><br/><br/>
-            <button name="submit" type="submit"   id="contact-submit" onClick={handleAlternateformsubmit}>Submit</button>
-            <button id="contact-cancel" >Cancel</button>
-            </div>
-            </form>
-    </div>
-    }
-    </div>
+              <div style={{textAlign:'justify',margin:'20px',marginLeft:'0px'}} >
+              <label>Options</label><br/>
+              <button onClick={addOtherOption}  className="imageBtn" >Add Option</button>
+              </div>
+                      {options.map((val,i)=>(
+                          <fieldset>
+                              <input placeholder="Option Key "
+                                value={val.option}
+                                onChange={(event)=>optionValueHandler(i,event,"option")} 
+                                type="text" tabindex="2" required id="quesText"/>
+
+                                <input placeholder="Option value"
+                                value={val.value}
+                                onChange={(event)=>optionValueHandler(i,event,"value")} 
+                                type="text" tabindex="2" required id="quesText"/>
+                                <div style={{textAlign:'justify'}} >
+                                <button onClick={()=>deleteOptionHandler(i)} 
+                                className="imageBtn" style={{backgroundColor:'red'}} > Delete</button>
+                                </div>
+                          </fieldset>
+                      ))}
+                      <br/><br/>
+                      
+                  
+                      {/* <fieldset>
+                      <input placeholder="Correct Value" type="text" tabindex="2" required id="correctVal"/>
+                      </fieldset> */}
+                     <fieldset  style={{textAlign:'justify'}} >
+                     {options && 
+                     
+                          <select className="imageBtn"  placeholder="Correct Value"
+                           value={corrval} onChange={(event)=>setcorrval(event.target.value)} >
+                             <option val={null} > No value Selected </option>
+                             {options.map(op=>(
+                               <option value={op.value} >{op.option}</option>
+                             ))}
+                           
+                         </select>
+                      }
+                      </fieldset>
+                      <fieldset>
+                        <input placeholder="Score" type="text" tabindex="2" required id="score"/>
+                      </fieldset>
+                      <button name="submit" type="submit"  id="contact-submit" >Submit</button>
+                        <button id="contact-cancel" onClick={()=>props.setformstate(false)} >Cancel</button>
+                        </div>
+                </form>}
+                {!csv && 
+                <div class="container">
+                        <form>
+                        <div className="formHeader" ><h3>Add a Question {!csv ? ' (via Csv)' :' (Manually)'}</h3></div>
+                          <div id="contact">
+                        <fieldset  style={{textAlign:'justify'}} >
+                          <input value={csvFile} onChange={(event)=>setcsvFile(event.target.value)} id="actual-btn" type="file" required  hidden />
+                          <label className="imageBtn" htmlFor="actual-btn"  >choose a csv file</label>
+                            <span id="file-chosen">{ csvFile &&  `${csvFile}` }</span>
+                          </fieldset><br/><br/>
+                        <button name="submit" type="submit"   id="contact-submit" onClick={handleAlternateformsubmit}>Submit</button>
+                        <button id="contact-cancel"  onClick={()=>props.setformstate(false)} >Cancel</button>
+                        </div>
+                        </form>
+                </div>
+                }
+                </div>
+                </React.Fragment>
     )
 }
 export default CreateQuestion

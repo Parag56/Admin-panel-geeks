@@ -5,8 +5,10 @@ import '../../../node_modules/react-datepicker/dist/react-datepicker.css'
 import $ from 'jquery'
 import ErrorSnackBar from '../ErrorSnackbar/ErrorSnackBar'
 import {AuthContext} from '../Context/Auth-Context'
-function CreateContest({setformstate}) {
+import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar'
+function CreateContest(props) {
    const auth=useContext(AuthContext)
+   //error snackbar functions 
   const [open, setOpen] = useState(false);
     const [error,setError]=useState()
     const handleClick = () => {
@@ -20,7 +22,10 @@ function CreateContest({setformstate}) {
   
       setOpen(false);
     };  
-  
+     //error snackbar functions 
+
+   
+   
   const [startTime,setStartTime]=useState()
   const [endTime,setEndTime]=useState()
   
@@ -65,10 +70,14 @@ function CreateContest({setformstate}) {
             success: function (data) {
               console.log("success");
               // console.log(JSON.stringify(data));
+              props.setOpenSuccess(true)
+              props.setSuccessMessage('Contest Created successfully')
+              props.setformstate(false)
             },
             error: function (error) {
              console.log(error)
-            
+            setError(error.responseJSON.message)
+            setOpen(true)
             },
           });
        }
@@ -80,7 +89,7 @@ function CreateContest({setformstate}) {
       };
        const maxNumber=1;
           const handlecancelclick=()=>{
-              setformstate(false)
+              props.setformstate(false)
           }
 
         const handleChangeInput=(i,event,temp)=>{
@@ -104,9 +113,10 @@ function CreateContest({setformstate}) {
         }  
     return (
         
-        <div class="container">  
+      <div class="container">  
+     
         {open && <ErrorSnackBar open={open}  handleClick={handleClick} error={error} handleClose={handleClose}  />}
-        <form   onSubmit={handleformsubmit} style={{marginTop:'50px'}}>
+        <form   onSubmit={handleformsubmit} style={{marginTop:'50px'}} >
         <div className="formHeader" ><h3>Create a New Contest</h3></div>
          
           <div id="contact" >
@@ -221,6 +231,7 @@ function CreateContest({setformstate}) {
             <br/>
           <select  className="imageBtn" placeholder="ContestType" value={contestType}
            onChange={(event)=>setContestType(event.target.value)}  >
+             <option value={null} > select contest type </option>
             <option value={'ongoing'}  >ongoing </option>
             <option value={'upcoming'} >upcoming </option>
             <option value={'previous'} >previous </option>

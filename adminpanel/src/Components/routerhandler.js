@@ -55,15 +55,15 @@ function Routerhandler() {
   }, [token, logout, tokenexpirationdate]);
 
   //Checks the remaining time in the token
-  useEffect(() => {
-    if (token && tokenexpirationdate) {
-      const remainingtime =
-        tokenexpirationdate.getTime() - new Date().getTime();
-      logouttimer = setTimeout(logout, remainingtime);
-    } else {
-      clearTimeout(logouttimer);
-    }
-  }, [token, logout, tokenexpirationdate]);
+  // useEffect(() => {
+  //   if (token && tokenexpirationdate) {
+  //     const remainingtime =
+  //       tokenexpirationdate.getTime() - new Date().getTime();
+  //     logouttimer = setTimeout(logout, remainingtime);
+  //   } else {
+  //     clearTimeout(logouttimer);
+  //   }
+  // }, [token, logout, tokenexpirationdate]);
 
   //Auto logins if the token is still present
   useEffect(() => {
@@ -106,12 +106,13 @@ if(token){
  
 }
 else{
-  routes=( <Switch>
-     <Route exact path="/">
+  routes=( 
+    <Switch>
+     <Route path="/">
       <LoginPage />
     </Route>
-     <Redirect to="/" />
-   </Switch>
+     {/* <Redirect to="/" /> */}
+    </Switch>
   )
  }
   return (

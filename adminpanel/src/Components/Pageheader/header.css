@@ -40,7 +40,8 @@
     background:#c250fc;
 }
 .filter{
-    padding: 1rem 2rem;
+    padding: 0rem 1rem;
+    max-height: 55px;
     border: 1px solid #6F2D91;
     color:#6F2D91;
     font-size: 1rem;

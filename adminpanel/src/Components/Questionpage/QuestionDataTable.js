@@ -14,7 +14,7 @@ const QuestionDataTable = (props) => {
         {/* <TableCell component="th" id={props.labelId} scope="row" padding="none">
         {props.row.id}
         </TableCell> */}
-       
+        <TableCell align="right">{props.row.name}</TableCell>
         <TableCell align="right">{props.row.question}</TableCell>
         <TableCell align="right">{props.row.correctvalue}</TableCell>
         <TableCell align="right">{props.row.score}</TableCell>

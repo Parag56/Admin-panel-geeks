@@ -11,11 +11,12 @@ const AdminTable = (props) => {
             inputProps={{ 'aria-labelledby': props.labelId }}
         />
         </TableCell>
+        <TableCell >{props.row.name}</TableCell>
         <TableCell component="th" id={props.labelId} scope="row" padding="none">
-        {props.row.adminname}
+        {props.row.adminemail}
         </TableCell>
        
-        <TableCell align="right">{props.row.adminemail}</TableCell>
+        <TableCell align="right">{props.row.adminname}</TableCell>
   
         </React.Fragment>
     )

@@ -14,8 +14,8 @@ const ContestDataTable = (props) => {
                 {/* <TableCell component="th" id={props.labelId} scope="row" padding="none">
                 {props.row.id}
                 </TableCell> */}
-               
-                <TableCell align="right">{props.row.contestname}</TableCell>
+                 <TableCell align="right" id={props.labelId} scope="row" >{props.row.name}</TableCell>
+                <TableCell align="right" id={props.labelId} scope="row" >{props.row.contestname}</TableCell>
                 <TableCell align="right">{props.row.contestduration}</TableCell>
                 <TableCell align="right">{props.row.starttime}</TableCell>
                 <TableCell align="right">{props.row.endtime}</TableCell>
