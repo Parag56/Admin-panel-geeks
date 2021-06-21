@@ -6,12 +6,16 @@ import Nulldata from '../Nulldata/Nulldata'
 import './Registereduser.css'
 import $ from 'jquery'
 import EnhancedTable from '../DataTable/Datatable'
+import { CSVLink, CSVDownload } from "react-csv";
 function RegisteredUsers() {
     const contestid=useParams().cid
     const [rows,setrows]=useState([])
     const [headCells,setheadcells]=useState([])
     const [loading,setloading]=useState(true)
     const [registeredusers,setregisteredusers]=useState([])
+    const [formstate,setformstate]=useState(false)
+    const [q,setQ]=useState("")
+    const [filterstate,setFilterState]=useState("")
       //Fetching all the  Registered Users of the contest
       useEffect(()=>{
         const url=`${process.env.REACT_APP_BACKEND_URL}getUsers/${contestid}`
@@ -28,25 +32,28 @@ function RegisteredUsers() {
 
                   const headcells = [
                     { id: 'email', numeric: false, disablePadding: true, label: 'Email' },
-                    { id: 'name', numeric: true, disablePadding: false, label: 'Name' },
+                    { id: 'username', numeric: true, disablePadding: false, label: 'Name' },
                     { id: 'id', numeric: true, disablePadding: false, label: 'Id' },
-                    { id: 'uploadimage', numeric: true, disablePadding: false, label: 'Upload Image' },
                     { id: 'phoneno', numeric: true, disablePadding: false, label: 'Phone Number'},
+                    { id: 'branch', numeric: true, disablePadding: false, label: 'Branch'} ,
                     {id: 'college', numeric: true, disablePadding: false, label: 'College'},
                     {  id:'year', numeric: true, disablePadding: false, label: 'Year'},
-                    { id: 'branch', numeric: true, disablePadding: false, label: 'Branch'} ,
+                   
                   ];
                   let Rows=[]
                   //defining Rows array
-                  data.registeredusers.map(user=>{
+                  console.log(data)
+                  data.data.map(user=>{
                     Rows.push({
                       email:user.email,
-                      name:user.name,
+                      username:user.name,
                       id:user.id,
+                      name:user._id,
                       phoneno:user.phoneno,
+                      branch:user.branch,
                       college:user.college,
                       year:user.year,
-                      branch:user.branch,
+                     
                     })
                   })
                   setrows(Rows);
@@ -60,11 +67,40 @@ function RegisteredUsers() {
               }
           })
       },[])
+
+        //filter function...
+   const filterFields=["email","username","branch","college"]
+   const search=(rows)=>{
+     if(filterstate=="")
+      return rows
+
+      if(filterstate=="email")
+      return rows.filter(r=>r.email!=null).filter(r=>r.email.toLowerCase().indexOf(q)==0 )
+
+      if(filterstate=="username")
+      return rows.filter(r=>r.username!=null).filter(r=>r.username.toLowerCase().indexOf(q)==0 )
+
+      if(filterstate=="branch")
+      return rows.filter(r=>r.branch!=null).filter(r=>r.branch.toLowerCase().indexOf(q)==0) 
+      if(filterstate=="college")
+      return rows.filter(r=>r.college!=null).filter(r=>r.college.toLowerCase().indexOf(q)==0) 
+
+     
+   }
+
+   //filter function...
     return (
         <div className="registered_users">   
         <div className="registered__usersheader">
-        <Header listsize={registeredusers.length} setloading={setloading} required="false"/>
+        <Header listsize={registeredusers.length} filterFields={filterFields}
+         filterstate={filterstate} setFilterState={setFilterState} 
+          setloading={setloading} setformstate={setformstate} required="false"/>
         </div>
+        { !formstate && !loading && <div style={{ display:'flex', justifyContent:'space-between',padding:'5px',margin:'10px' }} >
+           <CSVLink data={rows}  filename={"Questiondata.csv"}  ><button className="imageBtn" >Export Csv</button> 
+           </CSVLink>
+           <input style={{height:'40px' }} type="text" placeholder="Search here..." value={q} onChange={(e)=>setQ(e.target.value)} />
+           </div> }
         {loading&&(
            <Loader/>
         )}
@@ -75,7 +111,7 @@ function RegisteredUsers() {
        </div>
        {!loading&&registeredusers.length!==0&&(
            <div> 
-               <EnhancedTable heading="RegisteredUsers" rows={rows} headCells={headCells} />
+               <EnhancedTable heading="RegisteredUsers" rows={search(rows)} headCells={headCells} />
            </div>
        )}
         </div>

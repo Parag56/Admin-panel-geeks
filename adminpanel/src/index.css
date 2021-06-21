@@ -30,6 +30,7 @@ code {
   padding: .6rem 1.4rem;
   border: 2px solid rgb(7, 29, 29);
   border-radius: 5px;
+  margin-left:60px;
 }
 .logoutbtn:hover{
   cursor: pointer;

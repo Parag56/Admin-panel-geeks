@@ -36,6 +36,7 @@ function CreateContest(props) {
   ])
        const handleformsubmit=(e)=>{
          e.preventDefault()
+         props.setloading(true)
          console.log(contestType);
          console.log(contestItems)
         if(image.length==0 ){
@@ -44,6 +45,8 @@ function CreateContest(props) {
           console.log('upload an image')
           return;
         }
+        
+         
            let data={}
            data.contestname=document.getElementById('contestname').value
            data.starttime=startTime
@@ -52,13 +55,16 @@ function CreateContest(props) {
            data.noofquestions=document.getElementById('quesno').value
            data.contestduration=document.getElementById('contestduration').value
            data.prize=document.getElementById('prize').value
+           data.venue=document.getElementById('venue').value
            data.totalslots=contestItems
            data.slotstrength=document.getElementById('slotstrength').value
            data.rules=document.getElementById('rules').value
+           data.fees=document.getElementById('fees').value
            data.contestdetail=document.getElementById('contestDetail').value
            data.contesttype=contestType
 
-          // POST REQ To create a new user
+          // POST REQ To create a new contest
+         
           console.log(data)
            const url=`${process.env.REACT_APP_BACKEND_URL}createcontest`
            $.ajax({
@@ -70,12 +76,14 @@ function CreateContest(props) {
             success: function (data) {
               console.log("success");
               // console.log(JSON.stringify(data));
+              props.setloading(false)
               props.setOpenSuccess(true)
               props.setSuccessMessage('Contest Created successfully')
               props.setformstate(false)
             },
             error: function (error) {
              console.log(error)
+             props.setloading(false)
             setError(error.responseJSON.message)
             setOpen(true)
             },
@@ -136,22 +144,22 @@ function CreateContest(props) {
              </span>
           </fieldset>
           <fieldset>
-            <input placeholder="No of Questions" type="tel" tabindex="2" required id="quesno"/>
+            <input placeholder="No of Questions" type="number" tabindex="2" required id="quesno"/>
           </fieldset>
           <fieldset>
-            <input placeholder="Contest Duration(in hrs)" type="tel" tabindex="3" required id="contestduration"/>
+            <input placeholder="Contest Duration(in hrs)" type="number" tabindex="3" required id="contestduration"/>
           </fieldset>
            
           <div  clasName="imageUploaderMenu" style={{display:'inline',textAlign:'justify',margin:'10px'}} >
           {/* <input name="image" value={image} type="text" tabindex="3" required hidden />  */}
-      <ImageUploading
-        multiple
-        value={image}
-        onChange={onChange}
-        maxNumber={maxNumber}
-        dataURLKey="data_url"
-        required
-      >
+              <ImageUploading
+                multiple
+                value={image}
+                onChange={onChange}
+                maxNumber={maxNumber}
+                dataURLKey="data_url"
+                required
+              >
         
         {({
           imageList,
@@ -193,7 +201,7 @@ function CreateContest(props) {
           </fieldset>
           
           <fieldset>
-            <input placeholder=" Max Slot Strength" type="tel" tabindex="4" required id="slotstrength"/>
+            <input placeholder=" Max Slot Strength" type="number" tabindex="4" required id="slotstrength"/>
           </fieldset>
 
           <fieldset style={{textAlign:'justify'}}  >
@@ -225,6 +233,12 @@ function CreateContest(props) {
           
           <fieldset>
           <input placeholder="Rules" type="text" tabindex="4" required id="rules"/>
+          </fieldset>
+          <fieldset>
+          <input placeholder="Fees" type="number" tabindex="4" required id="fees"/>
+          </fieldset>
+          <fieldset>
+          <input placeholder="Venue" type="text" tabindex="4" required id="venue"/>
           </fieldset>
           <fieldset style={{textAlign:'justify'}} >
             <label>Contest Type</label>

@@ -3,7 +3,7 @@ import './CreateUser.css'
 import ImageUploading from 'react-images-uploading'
 import $ from 'jquery'
 import ErrorSnackBar from '../ErrorSnackbar/ErrorSnackBar'
-function Createuser({setformstate}) {
+function Createuser({setformstate,setOpenSuccess,setSuccessMessage}) {
   const [image,setImage]=useState([])
   const [open, setOpen] = useState(false);
   const [error,setError]=useState()
@@ -40,6 +40,8 @@ function Createuser({setformstate}) {
             url,
             success: function (data) {
               console.log("success");
+              setOpenSuccess(true)
+              setSuccessMessage('User Created Successfully')
               // console.log(JSON.stringify(data));
             },
             error: function (error) {
@@ -131,7 +133,7 @@ function Createuser({setformstate}) {
           <input placeholder="Branch" type="text" tabindex="4"  id="branch-val"/>
           </fieldset>
           <fieldset>
-          <input placeholder="Password" type="text" tabindex="4" required id="pass-val"/>
+          <input placeholder="Password" type="password" tabindex="4" required id="pass-val"/>
           </fieldset>
           <fieldset>
             <button name="submit" type="submit" id="contact-submit">Submit</button>

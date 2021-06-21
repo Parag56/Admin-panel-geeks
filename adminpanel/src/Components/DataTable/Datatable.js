@@ -290,7 +290,7 @@ export default function EnhancedTable(props) {
          setError('deletion Successful')
          setOpen(true)
          props.setloading(false)
-         if(props.heading=='contest' || props.heading=='questions'){
+         if(props.heading==='contest' || props.heading==='questions'){
            props.setformstate(true)
            props.setformstate(false)
            props.setOpenSuccess(true)

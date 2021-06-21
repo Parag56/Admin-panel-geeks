@@ -5,12 +5,14 @@ import EnhancedTable from '../DataTable/Datatable'
 import Header from '../Pageheader/Header'
 import Loader from '../Loader/Loader'
 import ErrorSnackBar from '../ErrorSnackbar/ErrorSnackBar'
+import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar'
 import { CSVLink, CSVDownload } from "react-csv";
 const AdminPage = () => {
     const auth=useContext(AuthContext)
     const [q,setQ]=useState("")
     const [filterstate,setFilterState]=useState("")
 
+    //error snackbar functions
     const [open, setOpen] = useState(false);
     const [error,setError]=useState()
     const handleClick = () => {
@@ -24,6 +26,23 @@ const AdminPage = () => {
   
       setOpen(false);
     };  
+     //error snackbar functions
+
+       //success snackbar functions..
+    const [opensuccess, setOpenSuccess] = useState(false);
+    const [successmessage,setSuccessMessage]=useState()
+    const handleClickSuccess = () => {
+      setOpenSuccess(true);
+    };
+    
+    const handleCloseSuccess = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+  
+      setOpenSuccess(false);
+    };  
+    //success snackbar functions..
 
     const [loading,setloading]=useState(true)
     const [headCells,setheadcells]=useState([])
@@ -49,6 +68,8 @@ const AdminPage = () => {
             success: function(data) {
               // console.log(data)
               setloading(false)
+              setSuccessMessage('Admin created successfully')
+              setOpenSuccess(true)
               setrows([...rows,data])
                console.log(data)
                setformstate(false)
@@ -114,10 +135,11 @@ const AdminPage = () => {
       return rows
 
       if(filterstate=="adminname")
-      return rows.filter(r=>r.adminname.toLowerCase().indexOf(q)==0 )
+      return rows.filter(r=>r.adminname!=null).filter(r=>r.adminname.toLowerCase().indexOf(q)==0 )
+     // rows.filter(r=>r.score!=null).filter(r=>r.score.indexOf(q)==0) 
 
       if(filterstate=="adminemail")
-      return rows.filter(r=>r.adminemail.toLowerCase().indexOf(q)==0 )
+      return rows.filter(r=>r.adminemail!=null).filter(r=>r.adminemail.toLowerCase().indexOf(q)==0 )
 
    }
 
@@ -126,14 +148,15 @@ const AdminPage = () => {
 
     return (
         <div >
+          {opensuccess &&  <SuccessSnackBar open={opensuccess} handleClick={handleClickSuccess} successmessage={successmessage} handleClose={handleCloseSuccess}  />  }
           {open && <ErrorSnackBar   open={open}  handleClick={handleClick} error={error} handleClose={handleClose} />}
           <Header  listsize={rows.length} filterFields={filterFields} filterstate={filterstate}
            setFilterState={setFilterState} setformstate={setformstate} setloading={setloading} required="true"/>
-          <div style={{ display:'flex', justifyContent:'space-between',padding:'5px',margin:'10px' }} >
+       { !formstate && !loading && <div style={{ display:'flex', justifyContent:'space-between',padding:'5px',margin:'10px' }} >
            <CSVLink data={rows}  filename={"userdata.csv"}  ><button className="imageBtn" >Export Csv</button> 
            </CSVLink>
            <input style={{height:'40px' }} type="text" placeholder="Search here..." value={q} onChange={(e)=>setQ(e.target.value)} />
-           </div> 
+           </div> }
           {loading && <Loader />}
           { formstate && <div  class="container" > 
            <form onSubmit={handleformsubmit} >

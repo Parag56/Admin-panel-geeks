@@ -104,11 +104,11 @@ const search=(rows)=>{
             <Header listsize={contestdata.length} filterFields={filterFields} 
             filterstate={filterstate} setFilterState={setFilterState} setformstate={setformstate}
              setloading={setloading} required="true"/>
-               <div style={{ display:'flex', justifyContent:'space-between',padding:'5px',margin:'10px' }} >
+             { !formstate  && !loading && <div style={{ display:'flex', justifyContent:'space-between',padding:'5px',margin:'10px' }} >
            <CSVLink data={rows}  filename={"Contests.csv"}  ><button className="imageBtn" >Export Csv</button> 
            </CSVLink>
            <input style={{height:'40px' }} type="text" placeholder="Search here..." value={q} onChange={(e)=>setQ(e.target.value)} />
-           </div> 
+           </div> }
             {opensuccess &&  <SuccessSnackBar open={opensuccess} handleClick={handleClickSuccess} successmessage={successmessage} handleClose={handleCloseSuccess} /> }
             {loading &&!formstate&& (
                 <Loader />
@@ -117,8 +117,9 @@ const search=(rows)=>{
                 <Nulldata setformstate={setformstate} required="true"/>
             )}
             {!loading &&  !formstate && contestdata.length>0 &&(
-                <EnhancedTable heading="contest" loading={loading} setloading={setloading}
-                setformstate={setformstate} rows={search(rows)} headCells={headCells} />
+                <EnhancedTable heading="contest" loading={loading} formstate={formstate} setloading={setloading}
+                setformstate={setformstate}  setOpenSuccess={setOpenSuccess} 
+                setSuccessMessage={setSuccessMessage} rows={search(rows)} headCells={headCells} />
             )}
               {formstate&&(
              <div>

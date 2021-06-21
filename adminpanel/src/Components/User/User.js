@@ -7,6 +7,7 @@ import './User.css'
 import EnhancedTable from '../DataTable/Datatable'
 import CreateUser from './Createuser'
 import { CSVLink, CSVDownload } from "react-csv";
+import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar'
 
 function User() {
     const [loading,setloading]=useState(true)
@@ -16,6 +17,22 @@ function User() {
     const [formstate,setformstate]=useState(false)
     const [q,setQ]=useState("")
     const [filterstate,setFilterState]=useState("")
+
+    //success snackbar functions..
+    const [opensuccess, setOpenSuccess] = useState(false);
+    const [successmessage,setSuccessMessage]=useState()
+    const handleClickSuccess = () => {
+      setOpenSuccess(true);
+    };
+    
+    const handleCloseSuccess = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+  
+      setOpenSuccess(false);
+    };  
+    //success snackbar functions..
     useEffect(()=>{
         const url=`${process.env.REACT_APP_BACKEND_URL}users`
         $.ajax({
@@ -93,15 +110,13 @@ function User() {
  
     return (
         <div className="user__page">
+           {opensuccess &&  <SuccessSnackBar open={opensuccess} handleClick={handleClickSuccess} successmessage={successmessage} handleClose={handleCloseSuccess}  />  }
           <Header  listsize={userdata.length} filterFields={filterFields} filterstate={filterstate} setFilterState={setFilterState} setformstate={setformstate} setloading={setloading} required="true"/>
-         {/* <fieldset style={{textAlign:'end'}}  > 
-           <input style={{height:'50px'}} type="text" placeholder="select filter field" value={q} onChange={(e)=>setQ(e.target.value)} />
-           </fieldset>  */}
-         <div style={{ display:'flex', justifyContent:'space-between',padding:'5px',margin:'10px' }} >
+         { !formstate && !loading && <div style={{ display:'flex', justifyContent:'space-between',padding:'5px',margin:'10px' }} >
            <CSVLink data={rows}  filename={"userdata.csv"}  ><button className="imageBtn" >Export Csv</button> 
            </CSVLink>
            <input style={{height:'40px' }} type="text" placeholder="Search here..." value={q} onChange={(e)=>setQ(e.target.value)} />
-           </div> 
+           </div> }
           {/* <CSVDownload data={csvData} target="_blank" />; */}
          {loading&&!formstate&&(
            <Loader/>
@@ -111,7 +126,8 @@ function User() {
          )}
          {formstate&&(
            <div>
-            <CreateUser setformstate={setformstate}/>
+            <CreateUser setformstate={setformstate} 
+            setOpenSuccess={setOpenSuccess} setSuccessMessage={setSuccessMessage} />
              </div>
          )}
          {!loading&&userdata.length!=0&&!formstate&&(

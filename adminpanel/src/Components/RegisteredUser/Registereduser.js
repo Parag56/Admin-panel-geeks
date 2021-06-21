@@ -40,7 +40,7 @@ function Registereduser() {
            <div className="contestcards">
             {!loading&&contests.length!==0&&(
               contests.map((contest)=>{
-                return <Link to={`/registeredusers/${contest.id}`}><ContestCard contestname={contest.Contestname} contestid={contest.id}/></Link>
+                return <Link to={`/registeredusers/${contest.id}`}><ContestCard contestname={contest.contestname} contestid={contest.id}/></Link>
              })
            )}
            </div>

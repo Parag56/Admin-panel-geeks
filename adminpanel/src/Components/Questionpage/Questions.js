@@ -130,11 +130,11 @@ function Questions() {
         <Header listsize={questions.length} filterFields={filterFields}
          filterstate={filterstate} setFilterState={setFilterState} setformstate={setformstate} 
          setloading={setloading} required="true"/>
-        <div style={{ display:'flex', justifyContent:'space-between',padding:'5px',margin:'10px' }} >
+      { !formstate && !loading && <div style={{ display:'flex', justifyContent:'space-between',padding:'5px',margin:'10px' }} >
            <CSVLink data={rows}  filename={"Questiondata.csv"}  ><button className="imageBtn" >Export Csv</button> 
            </CSVLink>
            <input style={{height:'40px' }} type="text" placeholder="Search here..." value={q} onChange={(e)=>setQ(e.target.value)} />
-           </div> 
+           </div> }
         </div>
         {loading&&!formstate&&(
            <Loader/>

@@ -15,8 +15,8 @@ const RegisteredUserTable = (props) => {
         {props.row.email}
         </TableCell>
        
+        <TableCell align="right">{props.row.username}</TableCell>
         <TableCell align="right">{props.row.name}</TableCell>
-        <TableCell align="right">{props.row.id}</TableCell>
        
         <TableCell align="right">{props.row.phoneno}</TableCell>
         <TableCell align="right">{props.row.branch}</TableCell>

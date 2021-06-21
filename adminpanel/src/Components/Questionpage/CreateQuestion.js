@@ -25,7 +25,7 @@ const CreateQuestion = (props) => {
   
       setOpen(false);
     };  
-    
+    //error snack bar function...
 
    
     const [image,setImage]=useState([])
