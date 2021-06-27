@@ -27,7 +27,7 @@
     display: flex;
 }
 .createfilter button{
-    margin:3px
+    margin-right:3px
 }
 .create{
     padding: 1rem 2rem;

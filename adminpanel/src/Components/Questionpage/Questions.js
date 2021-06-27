@@ -15,6 +15,7 @@ function Questions() {
     const contestid=useParams().cid
    
     const [loading,setloading]=useState(true)
+   
     const [rows,setrows]=useState([])
     const [headCells,setheadcells]=useState([])
     const [questions,setquestions]=useState([])
@@ -93,7 +94,7 @@ function Questions() {
             error:function(error){
                 //Set Loading sate to false
                 setloading(false)
-                setError(error.message || 'something went wrong...')
+                setError(error.responseJSON.message || 'something went wrong...')
                 setOpen(true)
                 console.error(error)
             }
@@ -146,11 +147,12 @@ function Questions() {
        </div>
        {!loading &&formstate&&(
            <CreateQuestion   opensuccess={opensuccess} setOpenSuccess={setOpenSuccess} 
-           formstate={formstate}  successmessage={successmessage} setSuccessMessage={setSuccessMessage} setformstate={setformstate} />
+           formstate={formstate}  successmessage={successmessage}
+            setSuccessMessage={setSuccessMessage} setformstate={setformstate} />
        )}
        {!loading&&!formstate&&questions.length!==0&&(
            <div>
-               <EnhancedTable  heading="questions" loading={loading} 
+               <EnhancedTable  heading="questions" loading={loading} formstate={formstate}
                setloading={setloading} setformstate={setformstate} setOpenSuccess={setOpenSuccess}
                setSuccessMessage={setSuccessMessage}
                  rows={search(rows)} headCells={headCells}  />

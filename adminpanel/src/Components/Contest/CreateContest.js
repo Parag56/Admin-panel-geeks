@@ -1,6 +1,7 @@
 import React,{useState,useContext} from 'react'
 import ImageUploading from 'react-images-uploading'
 import DatePicker from "react-datepicker"
+import Loader from '../Loader/Loader'
 import '../../../node_modules/react-datepicker/dist/react-datepicker.css'
 import $ from 'jquery'
 import ErrorSnackBar from '../ErrorSnackbar/ErrorSnackBar'
@@ -8,6 +9,7 @@ import {AuthContext} from '../Context/Auth-Context'
 import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar'
 function CreateContest(props) {
    const auth=useContext(AuthContext)
+   const [loading,setLoading]=useState(false)
    //error snackbar functions 
   const [open, setOpen] = useState(false);
     const [error,setError]=useState()
@@ -36,13 +38,14 @@ function CreateContest(props) {
   ])
        const handleformsubmit=(e)=>{
          e.preventDefault()
-         props.setloading(true)
+          setLoading(true)
          console.log(contestType);
          console.log(contestItems)
         if(image.length==0 ){
           setError('Please upload an image also. It is a required field.')
           setOpen(true)
           console.log('upload an image')
+          setLoading(false)
           return;
         }
         
@@ -76,14 +79,14 @@ function CreateContest(props) {
             success: function (data) {
               console.log("success");
               // console.log(JSON.stringify(data));
-              props.setloading(false)
+               setLoading(false)
               props.setOpenSuccess(true)
               props.setSuccessMessage('Contest Created successfully')
               props.setformstate(false)
             },
             error: function (error) {
              console.log(error)
-             props.setloading(false)
+             setLoading(false)
             setError(error.responseJSON.message)
             setOpen(true)
             },
@@ -122,9 +125,9 @@ function CreateContest(props) {
     return (
         
       <div class="container">  
-     
+        {loading && <Loader /> }
         {open && <ErrorSnackBar open={open}  handleClick={handleClick} error={error} handleClose={handleClose}  />}
-        <form   onSubmit={handleformsubmit} style={{marginTop:'50px'}} >
+       { !loading && <form   onSubmit={handleformsubmit} style={{marginTop:'50px'}} >
         <div className="formHeader" ><h3>Create a New Contest</h3></div>
          
           <div id="contact" >
@@ -256,7 +259,7 @@ function CreateContest(props) {
             <button id="contact-cancel" onClick={handlecancelclick}>Cancel</button>
           </fieldset>
           </div>
-        </form>
+        </form>}
       </div>
     )
 }

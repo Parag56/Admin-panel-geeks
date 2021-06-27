@@ -1,12 +1,14 @@
 import React,{useState,useContext} from 'react'
 import {useParams} from 'react-router-dom'
+import Loader from '../Loader/Loader'
 import ImageUploading from 'react-images-uploading'
 import ErrorSnackBar from '../ErrorSnackbar/ErrorSnackBar';
 import {AuthContext} from '../Context/Auth-Context'
 import $ from 'jquery'
 import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar';
 const CreateQuestion = (props) => {
-   const auth= useContext(AuthContext)
+    const auth= useContext(AuthContext)
+    const [loading,setLoading]=useState(false);
     const contestId=useParams().cid
     const [csvFile,setcsvFile]=useState()
     const [corrval,setcorrval]=useState()
@@ -43,7 +45,7 @@ const CreateQuestion = (props) => {
       const handleformsubmit=(e)=>{
         e.preventDefault()
           console.log(options,contestId);
-          
+          setLoading(true)
           const url=`${process.env.REACT_APP_BACKEND_URL}questions/${contestId}`
           let data={}
           data.question=document.getElementById('quesText').value
@@ -63,12 +65,14 @@ const CreateQuestion = (props) => {
               success: function (data) {
                 console.log("success");
                 // console.log(JSON.stringify(data));
+                setLoading(false)
                 props.setSuccessMessage('Question created successfully')
                 props.setOpenSuccess(true)
                 props.setformstate(false);
               },
               error: function (error) {
                 console.log(error)
+                setLoading(false)
                 setError(error.responseJSON.message)
                 setOpen(true)
                
@@ -95,8 +99,8 @@ const CreateQuestion = (props) => {
       }
     return (
         <React.Fragment>
-          
-        <div  class="container" >
+          {loading && <Loader/>  }
+      { !loading && <div  class="container" >
            
             <div style={{display:'flex',justifyContent:'center'}} > <span 
             style={{ backgroundColor:'#6F2D91',borderRadius:'4px', padding:'5px 10px',cursor:'pointer',color:'white',margin:'5px' }}  onClick={()=>setcsv(true)} >Add Questions Manually</span> 
@@ -164,14 +168,16 @@ const CreateQuestion = (props) => {
                       {options.map((val,i)=>(
                           <fieldset>
                               <input placeholder="Option Key "
-                                value={val.option}
+                                value={i+1}
                                 onChange={(event)=>optionValueHandler(i,event,"option")} 
-                                type="text" tabindex="2" required id="quesText"/>
+                                type="text" tabindex="2" required id={`queskey_${i}`}
+                                disabled
+                                />
 
                                 <input placeholder="Option value"
                                 value={val.value}
                                 onChange={(event)=>optionValueHandler(i,event,"value")} 
-                                type="text" tabindex="2" required id="quesText"/>
+                                type="text" tabindex="2" required id={`quesText_${i}`}/>
                                 <div style={{textAlign:'justify'}} >
                                 <button onClick={()=>deleteOptionHandler(i)} 
                                 className="imageBtn" style={{backgroundColor:'red'}} > Delete</button>
@@ -187,11 +193,11 @@ const CreateQuestion = (props) => {
                      <fieldset  style={{textAlign:'justify'}} >
                      {options && 
                      
-                          <select className="imageBtn"  placeholder="Correct Value"
+                        <select className="imageBtn"  placeholder="Correct Value"
                            value={corrval} onChange={(event)=>setcorrval(event.target.value)} >
                              <option val={null} > No value Selected </option>
-                             {options.map(op=>(
-                               <option value={op.value} >{op.option}</option>
+                             {options.map((op,i)=>(
+                               <option value={op.value} >{op.value}</option>
                              ))}
                            
                          </select>
@@ -220,7 +226,7 @@ const CreateQuestion = (props) => {
                         </form>
                 </div>
                 }
-                </div>
+                </div>}
                 </React.Fragment>
     )
 }
