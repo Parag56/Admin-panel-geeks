@@ -87,6 +87,7 @@ const CreateQuestion = (props) => {
       const optionValueHandler=(i,event,element)=>{
           const values=[...options]
           values[i][element]=event.target.value;
+          values[i]['option']=i+1
           setOptions(values);
       }
       const addOtherOption=()=>{
@@ -171,7 +172,7 @@ const CreateQuestion = (props) => {
                                 value={i+1}
                                 onChange={(event)=>optionValueHandler(i,event,"option")} 
                                 type="text" tabindex="2" required id={`queskey_${i}`}
-                                disabled
+                                 disabled
                                 />
 
                                 <input placeholder="Option value"
