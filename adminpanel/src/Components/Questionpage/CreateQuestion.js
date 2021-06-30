@@ -46,6 +46,12 @@ const CreateQuestion = (props) => {
         e.preventDefault()
           console.log(options,contestId);
           setLoading(true)
+          if(corrval==null){
+            setLoading(false)
+            setError('please select a correct value for this Question')
+            setOpen(true)
+            return;
+          }
           const url=`${process.env.REACT_APP_BACKEND_URL}questions/${contestId}`
           let data={}
           data.question=document.getElementById('quesText').value
@@ -137,7 +143,7 @@ const CreateQuestion = (props) => {
                 // write your building UI
                 <div className="upload__image-wrapper">
                     <label> Upload Image for Question</label><br/><br/>
-                    <button  className="imageBtn"
+                    <button  className="imageBtn" type="button"
                     style={isDragging ? { color: 'red' } : undefined}
                     onClick={onImageUpload}
                     {...dragProps}

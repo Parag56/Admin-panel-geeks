@@ -38,9 +38,8 @@ function CreateContest(props) {
   ])
        const handleformsubmit=(e)=>{
          e.preventDefault()
-          setLoading(true)
-         console.log(contestType);
-         console.log(contestItems)
+         // setLoading(true)
+        
         if(image.length==0 ){
           setError('Please upload an image also. It is a required field.')
           setOpen(true)
@@ -56,7 +55,8 @@ function CreateContest(props) {
            data.endtime=endTime
            data.image= image.length==0 ?null:image[0].data_url
            data.noofquestions=document.getElementById('quesno').value
-           data.contestduration=document.getElementById('contestduration').value
+          //  data.contestduration=document.getElementById('contestduration').value
+          data.contestduration=endTime-startTime
            data.prize=document.getElementById('prize').value
            data.venue=document.getElementById('venue').value
            data.totalslots=contestItems
@@ -149,9 +149,6 @@ function CreateContest(props) {
           <fieldset>
             <input placeholder="No of Questions" type="number" tabindex="2" required id="quesno"/>
           </fieldset>
-          <fieldset>
-            <input placeholder="Contest Duration(in hrs)" type="number" tabindex="3" required id="contestduration"/>
-          </fieldset>
            
           <div  clasName="imageUploaderMenu" style={{display:'inline',textAlign:'justify',margin:'10px'}} >
           {/* <input name="image" value={image} type="text" tabindex="3" required hidden />  */}
@@ -178,6 +175,7 @@ function CreateContest(props) {
              <label  >Select an Image for Contest</label><br/><br/>
             <button  className="imageBtn"
               style={isDragging ? { color: 'red' } : undefined}
+              type="button"
               onClick={onImageUpload}
               {...dragProps}
             >
@@ -210,7 +208,7 @@ function CreateContest(props) {
           <fieldset style={{textAlign:'justify'}}  >
             <label>Total Slots</label>
             <br/>
-            <button  className="imageBtn" onClick={handelAddFields}  >Add New Items</button><br/><br/>
+            <button  className="imageBtn" type="button" onClick={handelAddFields}  >Add New Items</button><br/><br/>
              {contestItems.map((times,i)=>(
                <div key={i} style={{margin:'10px'}} >
                  <input style={{margin:'5px'}} placeholder="Slot no" type="text" tabindex="3" id="slot"
