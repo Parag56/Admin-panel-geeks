@@ -225,3 +225,61 @@ main footer button{
 main footer button:hover{
     cursor: pointer;
 }
+.chat-message-div{
+	display: flex;
+}
+.chat-message-sent {
+	background-color:black;
+	margin: 8px 16px 8px 64px;
+	padding: 8px 16px;
+	animation-name: fadeIn;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: 100ms;
+	color:white;
+	border-radius: 8px 8px 2px 8px;
+	/* background-color: lavender; */
+  }
+  .chat-message-received {
+	background-color:black;
+	margin: 8px 64px 8px 16px;
+	padding: 8px 16px;
+	animation-name: fadeIn;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: 100ms;
+	color: white;
+	border-radius: 8px 8px 8px 2px;
+  }
+  @keyframes fadeIn {
+	from {
+	  opacity: 0;
+	}
+  
+	to {
+	  opacity: 1;
+	}
+  }
+  .chat-area{
+	flex-grow: 1;
+	overflow: auto;
+	border-radius: 8px;
+	padding: 16px;
+	display: flex;
+	flex-direction: column;
+  }
+  ::-webkit-scrollbar {
+	width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+	background: #f1f1f1;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+	background: #888;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+	background: #555;
+  }
+  
