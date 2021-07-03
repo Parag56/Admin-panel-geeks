@@ -25,6 +25,7 @@ import HomePage from '../Homepage/Homepage'
 import Contest from '../Contest/Contest'
 import AdminPage from '../Admin/AdminPage.js';
 import {AuthContext} from '../Context/Auth-Context'
+import Chat from '../Adminsupport/Chat'
 import { useHistory } from 'react-router';
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -116,6 +117,9 @@ export default function PersistentDrawerLeft() {
   const handleadmin=()=>{
     setactivepage("adminPage")
   }
+  const handlechatclick=()=>{
+    setactivepage("chatPage")
+  }
   const auth=useContext(AuthContext)
   return (
     <div className={classes.root}>
@@ -144,11 +148,7 @@ export default function PersistentDrawerLeft() {
           <h2>Parag56</h2>
           <button className="logoutbtn" onClick={()=>{auth.logout() 
             history.push("/")}}>Logout</button>
-
           </div>
-          
-          
-        
         </Toolbar>
         
       </AppBar>
@@ -193,6 +193,10 @@ export default function PersistentDrawerLeft() {
               <ListItemIcon> <InboxIcon /> </ListItemIcon>
               <ListItemText>Admin Page</ListItemText>
             </ListItem>
+            <ListItem button onClick={handlechatclick}>
+              <ListItemIcon> <InboxIcon /> </ListItemIcon>
+              <ListItemText>Support</ListItemText>
+            </ListItem>
         </List>
         <Divider />
       </Drawer>
@@ -223,6 +227,9 @@ export default function PersistentDrawerLeft() {
           )}
            {activepage==="adminPage"&&(
             <AdminPage />
+          )}
+          {activepage==="chatPage"&&(
+            <Chat/>
           )}
         </Typography>
       </main>
