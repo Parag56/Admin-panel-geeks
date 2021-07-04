@@ -80,7 +80,6 @@ function LoginPage() {
           setOpen(true)
           setloading(false)
         }
-      
     })
   
   };

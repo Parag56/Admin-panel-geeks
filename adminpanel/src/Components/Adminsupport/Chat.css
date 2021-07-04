@@ -63,10 +63,20 @@ aside li:hover{
 h2,h3{
 	margin:0;
 }
-aside li img{
+/* aside li img{
 	border-radius:50%;
 	margin-left:20px;
 	margin-right:8px;
+} */
+.MuiAvatar-root{
+	border-radius:50%!important;
+	margin-left:20px!important;
+	margin-right:8px!important;
+	display: inline-block!important;
+	background-color: green!important;
+}
+.MuiAvatar-fallback{
+	margin-top: 9%!important;
 }
 aside li div{
 	display:inline-block;
@@ -238,7 +248,18 @@ main footer button:hover{
 	animation-duration: 100ms;
 	color:white;
 	border-radius: 8px 8px 2px 8px;
-	/* background-color: lavender; */
+  }
+  .chat-message-received-timestamp{
+	color:rgb(161, 156, 156);
+	text-align: left;
+	padding-left: 10px;
+	font-size: 13px;
+  }
+  .chat-message-sent-timestamp{
+	color:rgb(161, 156, 156);
+	text-align: right;
+	padding-right: 10px;
+	font-size: 13px;
   }
   .chat-message-received {
 	background-color:black;
