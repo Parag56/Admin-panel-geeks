@@ -147,10 +147,10 @@ const AdminPage = () => {
 
 
     return (
-        <div >
+        <React.Fragment>
           {opensuccess &&  <SuccessSnackBar open={opensuccess} handleClick={handleClickSuccess} successmessage={successmessage} handleClose={handleCloseSuccess}  />  }
           {open && <ErrorSnackBar   open={open}  handleClick={handleClick} error={error} handleClose={handleClose} />}
-          <Header  listsize={rows.length} filterFields={filterFields} filterstate={filterstate}
+       <Header  listsize={rows.length} filterFields={filterFields} filterstate={filterstate}
            setFilterState={setFilterState} setformstate={setformstate} setloading={setloading} required="true"/>
        { !formstate && !loading && <div style={{ display:'flex', justifyContent:'space-between',padding:'5px',margin:'10px' }} >
            <CSVLink data={rows}  filename={"userdata.csv"}  ><button className="imageBtn" >Export Csv</button> 
@@ -158,7 +158,8 @@ const AdminPage = () => {
            <input style={{height:'40px' }} type="text" placeholder="Search here..." value={q} onChange={(e)=>setQ(e.target.value)} />
            </div> }
           {loading && <Loader />}
-          { formstate && <div  class="container" > 
+        
+          { formstate && !loading && <div  class="container" > 
            <form onSubmit={handleformsubmit} >
             <div className="formHeader" ><h3>Admin Page</h3></div>
                 <div id="contact" >
@@ -178,10 +179,10 @@ const AdminPage = () => {
             <button id="contact-cancel"onClick={()=>setformstate(false)}  >Cancel</button>
             </div>
     </form> </div>}
-       { !formstate && <EnhancedTable heading="admin" loading={loading} 
+       { !formstate && !loading && <EnhancedTable heading="admin" loading={loading} 
        setloading={setloading} headCells={headCells} rows={search(rows)} />}
         
-        </div>
+        </React.Fragment>
     )
 }
 

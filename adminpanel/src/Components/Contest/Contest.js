@@ -13,6 +13,7 @@ function Contest(){
     const [headCells,setheadcells]=useState([])
     const [rows,setrows]=useState([])
     const [formstate,setformstate]=useState(false)
+    const [updateformstate,setupdateformstate]=useState(false)
     const [q,setQ]=useState("")
     const [filterstate,setFilterState]=useState("")
      //success snackbar functions..
@@ -101,7 +102,7 @@ const search=(rows)=>{
 
     return (
         <div>
-            <Header listsize={contestdata.length} filterFields={filterFields} 
+            <Header listsize={contestdata.length} updateformstate={updateformstate} filterFields={filterFields} 
             filterstate={filterstate} setFilterState={setFilterState} setformstate={setformstate}
              setloading={setloading} required="true"/>
              { !formstate  && !loading && <div style={{ display:'flex', justifyContent:'space-between',padding:'5px',margin:'10px' }} >

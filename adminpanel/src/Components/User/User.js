@@ -1,8 +1,9 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect,useContext} from 'react'
 import $ from 'jquery'
 import Loader from '../Loader/Loader'
 import Header from '../Pageheader/Header'
 import Nulldata from '../Nulldata/Nulldata'
+import { AuthContext } from '../Context/Auth-Context'
 import './User.css'
 import EnhancedTable from '../DataTable/Datatable'
 import CreateUser from './Createuser'
@@ -11,6 +12,7 @@ import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar'
 
 function User() {
     const [loading,setloading]=useState(true)
+    const auth=useContext(AuthContext)
     const [userdata,setuserdata]=useState([])
     const [headCells,setheadcells]=useState([])
     const [rows,setrows]=useState([])
@@ -38,6 +40,9 @@ function User() {
         $.ajax({
             url,
             dataType: 'json',
+            headers:{
+            'Authorization':'Bearer '+auth.token
+            },
             cache: false,
             success: function(data) {
               // console.log(data)

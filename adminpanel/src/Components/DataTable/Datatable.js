@@ -288,6 +288,7 @@ export default function EnhancedTable(props) {
          console.log("success");
         
          setError('deletion Successful')
+         setSelected([])
          setOpen(true)
          props.setloading(false)
          if(props.heading==='contest' || props.heading==='questions'){

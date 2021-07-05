@@ -2,6 +2,7 @@ import React,{useState,useContext} from 'react'
 import ImageUploading from 'react-images-uploading'
 import DatePicker from "react-datepicker"
 import Loader from '../Loader/Loader'
+import { setMinutes,setHours } from 'date-fns'
 import '../../../node_modules/react-datepicker/dist/react-datepicker.css'
 import $ from 'jquery'
 import ErrorSnackBar from '../ErrorSnackbar/ErrorSnackBar'
@@ -136,14 +137,24 @@ function CreateContest(props) {
           </fieldset>
           <fieldset style={{textAlign:'justify'}} >
             <span style={{marginRight:'5px'}} >
-          <DatePicker selected={startTime} name="slot" placeholderText="Start Time"
-            showTimeSelect dateFormat="Pp"
+          <DatePicker selected={startTime} selectsStart 
+            startDate={startTime} endDate={endTime} 
+            name="slot" 
+            placeholderText="Start Time"
+            timeInputLabel="Time:"
+             dateFormat="Pp"
+             showTimeInput
+             minDate={Date.now() }
              onChange={date => setStartTime(date)}  />
              </span>
              <span style={{marginLeft:'10px'}} >
-              <DatePicker selected={endTime} placeholderText="End Time"
-            showTimeSelect dateFormat="Pp"
-             onChange={date => setEndTime(date)} />
+              <DatePicker selected={endTime}  selectsEnd startDate={startTime} 
+              endDate={endTime} minDate={startTime} 
+              placeholderText="End Time"
+              timeInputLabel="Time:"
+              dateFormat="Pp"
+              showTimeInput
+              onChange={date => setEndTime(date)} />
              </span>
           </fieldset>
           <fieldset>
@@ -214,13 +225,13 @@ function CreateContest(props) {
                  <input style={{margin:'5px'}} placeholder="Slot no" type="text" tabindex="3" id="slot"
                   onChange={event => handleChangeInput(i,event,"slotno")} value={times.slotno} required />
                  <span style={{ margin:'5px'}}>
-                  <DatePicker style={{margin:'3px'}} selected={times.slotstarttime} value={times.slotstarttime} name="slotstarttime" placeholderText="Slot Start Time"
-                    showTimeSelect dateFormat="Pp"
+                  <DatePicker style={{margin:'3px'}} minDate={new Date(Date.now())} selected={times.slotstarttime} value={times.slotstarttime} name="slotstarttime" placeholderText="Slot Start Time"
+                    showTimeInput  timeInputLabel="Time:" dateFormat="Pp"
                     onChange={event => handleChangeInput(i,event,"slotstarttime")} />
                     </span>
                     <span style={{margin:'5px'}}>
                       <DatePicker style={{margin:'3px' }} selected={times.slotendtime} value={times.slotendtime} name="slotendtime"  placeholderText="Slot End Time"
-                    showTimeSelect dateFormat="Pp"
+                    showTimeInput  timeInputLabel="Time:" minDate={times.slotstarttime} dateFormat="Pp"
                     onChange={date => handleChangeInput(i,date,"slotendtime")} />
                      </span>
                     <br/>

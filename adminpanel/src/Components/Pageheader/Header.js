@@ -1,6 +1,6 @@
 import React from "react";
 import "./header.css";
-function Header({ listsize, setformstate, setloading, required,filterstate ,setFilterState,filterFields}) {
+function Header({ listsize, setformstate, setloading, required,filterstate ,setFilterState,filterFields,updateformstate}) {
   const handlecreateclick = () => {
     setformstate(true);
     setloading(false);
@@ -11,6 +11,7 @@ function Header({ listsize, setformstate, setloading, required,filterstate ,setF
         <h1>List</h1>
         <span>{listsize?listsize:0}</span>
       </div>
+      { updateformstate && <div> Update </div>}
       <div className="createfilter">
         {required==="true" && (
           <button className="create" onClick={handlecreateclick}>
