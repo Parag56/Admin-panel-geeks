@@ -39,7 +39,7 @@ function CreateContest(props) {
   ])
        const handleformsubmit=(e)=>{
          e.preventDefault()
-         // setLoading(true)
+          setLoading(true)
         
         if(image.length==0 ){
           setError('Please upload an image also. It is a required field.')

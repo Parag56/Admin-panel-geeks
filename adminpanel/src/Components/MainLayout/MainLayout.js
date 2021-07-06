@@ -145,7 +145,7 @@ export default function PersistentDrawerLeft() {
             Geeksman
           </Typography>
           <div className="user__name">
-          <h2>Parag56</h2>
+          <h2 style={{whiteSpace:'nowrap'}} >{auth.adminname}</h2>
           <button className="logoutbtn" onClick={()=>{auth.logout() 
             history.push("/")}}>Logout</button>
           </div>
