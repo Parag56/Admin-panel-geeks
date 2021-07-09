@@ -51,6 +51,9 @@
     display: inline-block;
     margin-right: 2px;
 }
+.filter option{
+    background-color: #eee;
+}
 .filter:hover{
     cursor: pointer;
     color: black;

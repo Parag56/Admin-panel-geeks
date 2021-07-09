@@ -23,6 +23,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import UserDataTable from '../User/UserDataTable';
 import ContestDataTable from '../Contest/ContestDataTable';
+import MemberDatatable from '../Members/MemberDatatable'
 import RegisteredUserTable from '../RegisteredUser/RegisteredUserTable'
 import PendingUserTable from '../PendingUser/PendingUserTable';
 import AdminTable from '../Admin/AdminTable';
@@ -291,7 +292,8 @@ export default function EnhancedTable(props) {
          setSelected([])
          setOpen(true)
          props.setloading(false)
-         if(props.heading==='contest' || props.heading==='questions'){
+         if(props.heading==='contest' || props.heading==='questions' || props.heading==='memberspage' ){
+           //basically formstate is rendered here because get method in useEffect has formstate as a dependency so to call it again it is rendered here... 
           props.setformstate(false)
            props.setformstate(true);
             props.setformstate(false)
@@ -416,6 +418,7 @@ export default function EnhancedTable(props) {
                        {props.heading==='pendinguser' &&
                         <PendingUserTable row={row} isItemSelected={isItemSelected} labelId={labelId}  /> }
                         {props.heading==='admin' && <AdminTable row={row} isItemSelected={isItemSelected} labelId={labelId} /> }
+                        {props.heading==='memberspage' && <MemberDatatable row={row} isItemSelected={isItemSelected} labelId={labelId} /> }
                     </TableRow>
                   );
                 })}

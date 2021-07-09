@@ -27,6 +27,7 @@ import AdminPage from '../Admin/AdminPage.js';
 import {AuthContext} from '../Context/Auth-Context'
 import Chat from '../Adminsupport/Chat'
 import { useHistory } from 'react-router';
+import Members from '../Members/Members'
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -120,6 +121,9 @@ export default function PersistentDrawerLeft() {
   const handlechatclick=()=>{
     setactivepage("chatPage")
   }
+  const handlememberclick=()=>{
+    setactivepage("memberspage")
+  }
   const auth=useContext(AuthContext)
   return (
     <div className={classes.root}>
@@ -197,6 +201,10 @@ export default function PersistentDrawerLeft() {
               <ListItemIcon> <InboxIcon /> </ListItemIcon>
               <ListItemText>Support</ListItemText>
             </ListItem>
+            <ListItem button onClick={handlememberclick}>
+              <ListItemIcon> <InboxIcon /> </ListItemIcon>
+              <ListItemText>Members Page</ListItemText>
+            </ListItem>
         </List>
         <Divider />
       </Drawer>
@@ -230,6 +238,9 @@ export default function PersistentDrawerLeft() {
           )}
           {activepage==="chatPage"&&(
             <Chat/>
+          )}
+           {activepage==="memberspage"&&(
+            <Members/>
           )}
         </Typography>
       </main>
