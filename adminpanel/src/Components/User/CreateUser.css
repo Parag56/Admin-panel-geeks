@@ -170,7 +170,7 @@ fieldset {
 .formHeader{
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-around;
   background-color: #6F2D91;
   height:75px;
   text-align: center;
@@ -185,3 +185,4 @@ fieldset {
   font-weight: lighter;
   color:white;
 }
+

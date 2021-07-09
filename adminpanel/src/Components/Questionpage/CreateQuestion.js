@@ -109,9 +109,11 @@ const CreateQuestion = (props) => {
           {loading && <Loader/>  }
       { !loading && <div  class="container" >
            
-            <div style={{display:'flex',justifyContent:'center'}} > <span 
-            style={{ backgroundColor:'#6F2D91',borderRadius:'4px', padding:'5px 10px',cursor:'pointer',color:'white',margin:'5px' }}  onClick={()=>setcsv(true)} >Add Questions Manually</span> 
-            <span style={{ backgroundColor:'#6F2D91',borderRadius:'4px',padding:'5px 10px',cursor:'pointer',color:'white',margin:'5px' }}
+            <div style={{display:'flex',justifyContent:'center'}} >
+               <span 
+            style={{ backgroundColor:`#6F2D91`, borderBottom:`${ !csv ?'5px solid #5a346de3':'none'}` ,borderRadius:'4px', padding:'5px 10px',cursor:'pointer',color:'white',margin:'5px' }}
+              onClick={()=>setcsv(true)} >Add Questions Manually</span> 
+            <span style={{ backgroundColor:'#6F2D91', borderBottom:`${ csv ?'5px solid #5a346de3':'none'}`, borderRadius:'4px',padding:'5px 10px',cursor:'pointer',color:'white',margin:'5px' }}
               onClick={()=>{setcsv(false)
                setcsvFile(null)
               }
@@ -204,7 +206,7 @@ const CreateQuestion = (props) => {
                            value={corrval} onChange={(event)=>setcorrval(event.target.value)} >
                              <option val={null} > No value Selected </option>
                              {options.map((op,i)=>(
-                               <option value={op.value} >{op.value}</option>
+                               <option value={op.value} >{i+1}</option>
                              ))}
                            
                          </select>
