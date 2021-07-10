@@ -1,14 +1,16 @@
-import React, { useEffect, useState,useCallback } from 'react'
+import React, { useEffect, useState } from 'react'
 import $ from 'jquery'
 import { io } from "socket.io-client";
 import { Avatar } from '@material-ui/core';
 import './Chat.css'
+import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar'
  const Chat = () => {
     const [roomids,setroomids]=useState([])
     const [socket,setsocket]=useState(null)
 	const [activeroomid,setactiveroomid]=useState(null)
 	const [activeusername,setactiveusername]=useState(null)
 	const [messages,setmessages]=useState([])
+	
     useEffect(()=>{
         const url=`${process.env.REACT_APP_BACKEND_URL}getrooms/${JSON.parse(localStorage.getItem('adminData')).adminid}`
         console.log(url)
@@ -69,20 +71,34 @@ import './Chat.css'
           }
        }
     const handleconnection=(roomid)=>{
+		if(roomid!==activeroomid){
 		const socket=io("http://localhost:5000/connection")
 		socket.emit("join-room-admin",roomid)
 		setactiveroomid(roomid)
 		setsocket(socket)
+		}
     }
-		if(socket){
+
+	if(socket){
        socket.on('message',(msg,id,timestamp)=>{
 		   setmessages([...messages,{msg,id,timestamp}])
 	   })
 	}
-	
-   
+
+	if(socket){
+		socket.on('disconnectclient',()=>{
+			socket.disconnect()
+		})
+	}
+
+    const handleendchat=()=>{
+		if(socket&&activeroomid){
+			socket.emit('endchat',activeroomid,JSON.parse(localStorage.getItem('adminData')).adminid)
+		}
+	}
     return (    
-<div>
+<div className="admin__chat">
+<SuccessSnackBar/>
 {roomids.length===0&&(
 	<div>There are no users</div>
 )}
@@ -98,7 +114,6 @@ import './Chat.css'
 				    handleconnection(room.id)
 					setactiveusername(room.username) 
 			        }}>
-                    {/* <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1940306/chat_avatar_01.jpg" alt=""/> */}
 					<Avatar/>
 				<div>
 					<h2>{room.username}</h2>
@@ -117,6 +132,9 @@ import './Chat.css'
 			<div>
 				<h2>Chat with {activeusername}</h2>
 				<h3>{messages.length} messages in chat</h3>
+			</div>
+			<div>
+				<button className="endchatbtn" onClick={handleendchat}>End Chat</button>
 			</div>
 		</header>
 		<ul className="chat-area" id="chat">

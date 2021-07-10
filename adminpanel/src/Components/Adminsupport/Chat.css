@@ -1,6 +1,13 @@
+.admin__chat{
+	height:100%;
+	width:100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
 #container{
-	width:70%;
-	height:80%;
+	width:80vw;
+	height:80vh;
 	background:#eff3f7;
 	margin:0 auto;
 	font-size:0;
@@ -11,20 +18,24 @@
 }
 aside{
     flex: .4;
-
+    height: 100%;
 	background-color:#3b3e49;
 	display:inline-block;
 	font-size:15px;
 	vertical-align:top;
 }
 main{
+	height: 100%;
     flex: .6;
-	display:inline-block;
-	font-size:15px;
-	vertical-align:top;
+    display: inline-block;
+    font-size: 15px;
+    vertical-align: top;
 }
 
 aside header{
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	padding:30px 20px;
     background-color: #5e616a;
 }
@@ -105,6 +116,16 @@ aside li h3{
 .green{
 	background-color:#58b666;
 }
+.endchatbtn{
+	padding: .7rem .9rem;
+    color: purple;
+    border-radius: 5px;
+    border: 1px solid;
+}
+.endchatbtn:hover{
+	cursor: pointer;
+	background-color: white;
+}
 .orange{
 	background-color:#ff725d;
 }
@@ -115,7 +136,10 @@ aside li h3{
 }
 
 main header{
-	height:110px;
+	height:20%;
+	display: flex;
+    align-items: center;
+    justify-content:center;
 	padding:30px 20px 30px 40px;
 }
 main header > *{
@@ -148,7 +172,7 @@ main header h3{
 	margin:0;
 	list-style-type:none;
 	overflow-y:scroll;
-	height:535px;
+	height:68%;
 	border-top:2px solid #fff;
 	border-bottom:2px solid #fff;
 }
