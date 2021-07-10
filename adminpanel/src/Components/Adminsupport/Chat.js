@@ -10,6 +10,22 @@ import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar'
 	const [activeroomid,setactiveroomid]=useState(null)
 	const [activeusername,setactiveusername]=useState(null)
 	const [messages,setmessages]=useState([])
+      //success snackbar functions..
+	  const [opensuccess, setOpenSuccess] = useState(false);
+	  const [successmessage,setSuccessMessage]=useState()
+	  const handleClickSuccess = () => {
+		setOpenSuccess(true);
+	  };
+	  
+	  const handleCloseSuccess = (event, reason) => {
+		if (reason === 'clickaway') {
+		  return;
+		}
+	
+		setOpenSuccess(false);
+	  };  
+	  //success snackbar functions..
+
 	
     useEffect(()=>{
         const url=`${process.env.REACT_APP_BACKEND_URL}getrooms/${JSON.parse(localStorage.getItem('adminData')).adminid}`
@@ -83,13 +99,17 @@ import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar'
        socket.on('message',(msg,id,timestamp)=>{
 		   setmessages([...messages,{msg,id,timestamp}])
 	   })
+	   socket.on('disconnectclient',()=>{
+		   //here...
+		   setOpenSuccess(true)
+		   setSuccessMessage(`chat ended with ${activeusername}`)
+		socket.disconnect()
+	})
 	}
 
-	if(socket){
-		socket.on('disconnectclient',()=>{
-			socket.disconnect()
-		})
-	}
+	
+		
+
 
     const handleendchat=()=>{
 		if(socket&&activeroomid){
@@ -98,7 +118,7 @@ import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar'
 	}
     return (    
 <div className="admin__chat">
-<SuccessSnackBar/>
+{opensuccess &&  <SuccessSnackBar open={opensuccess} handleClick={handleClickSuccess} successmessage={successmessage} handleClose={handleCloseSuccess} /> }
 {roomids.length===0&&(
 	<div>There are no users</div>
 )}
