@@ -88,7 +88,7 @@ import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar'
        }
     const handleconnection=(roomid)=>{
 		if(roomid!==activeroomid){
-		const socket=io("http://localhost:5000/connection")
+		const socket=io(`${process.env.REACT_APP_BACKEND_URL}connection`)
 		socket.emit("join-room-admin",roomid)
 		setactiveroomid(roomid)
 		setsocket(socket)
@@ -99,18 +99,14 @@ import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar'
        socket.on('message',(msg,id,timestamp)=>{
 		   setmessages([...messages,{msg,id,timestamp}])
 	   })
-	   socket.on('disconnectclient',()=>{
+	   socket.on('userdisconnect-successfull',()=>{
 		   //here...
-		   setOpenSuccess(true)
-		   setSuccessMessage(`chat ended with ${activeusername}`)
+		setOpenSuccess(true)
+		setSuccessMessage(`chat ended with ${activeusername}`)
+		console.log('worked')
 		socket.disconnect()
 	})
 	}
-
-	
-		
-
-
     const handleendchat=()=>{
 		if(socket&&activeroomid){
 			socket.emit('endchat',activeroomid,JSON.parse(localStorage.getItem('adminData')).adminid)
