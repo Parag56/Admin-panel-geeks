@@ -85,7 +85,7 @@ import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar'
             event.preventDefault();
             handlesendmessage();
           }
-       }
+    }
     const handleconnection=(roomid)=>{
 		if(roomid!==activeroomid){
 		const socket=io(`${process.env.REACT_APP_BACKEND_URL}connection`)
@@ -100,7 +100,7 @@ import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar'
 		   setmessages([...messages,{msg,id,timestamp}])
 	   })
 	   socket.on('userdisconnect-successfull',()=>{
-		   //here...
+		//here...
 		setOpenSuccess(true)
 		setSuccessMessage(`chat ended with ${activeusername}`)
 		console.log('worked')
@@ -122,7 +122,7 @@ import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar'
 <div id="container">
 	<aside>
 		<header>
-		    <h1 style={{color:'white'}}>Rooms</h1>
+		    <h1 style={{color:'white'}}>Users</h1>
 		</header>
 		<ul>
             {roomids.length!==0&&roomids.map((room)=>{

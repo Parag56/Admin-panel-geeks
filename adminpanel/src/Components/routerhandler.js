@@ -54,18 +54,17 @@ function Routerhandler() {
     }
   }, [token, logout, tokenexpirationdate]);
 
-  //Checks the remaining time in the token
-  // useEffect(() => {
-  //   if (token && tokenexpirationdate) {
-  //     const remainingtime =
-  //       tokenexpirationdate.getTime() - new Date().getTime();
-  //     logouttimer = setTimeout(logout, remainingtime);
-  //   } else {
-  //     clearTimeout(logouttimer);
-  //   }
-  // }, [token, logout, tokenexpirationdate]);
-
-  //Auto logins if the token is still present
+  // Checks the remaining time in the token
+  useEffect(() => {
+    if (token && tokenexpirationdate) {
+      const remainingtime =
+        tokenexpirationdate.getTime() - new Date().getTime();
+      logouttimer = setTimeout(logout, remainingtime);
+    } else {
+      clearTimeout(logouttimer);
+    }
+  }, [token, logout, tokenexpirationdate]);
+  // Auto logins if the token is still present
   useEffect(() => {
     const storeddata = JSON.parse(localStorage.getItem("adminData"));
     if (
@@ -82,8 +81,6 @@ function Routerhandler() {
     }
   }, []);
 let routes
-
-
 if(token){
   routes=(
     <Switch>
@@ -103,15 +100,13 @@ if(token){
     <Redirect to="/home" />
   </Switch>
   )
- 
 }
 else{
   routes=( 
     <Switch>
-     <Route path="/">
+     <Route path="*">
       <LoginPage />
     </Route>
-     {/* <Redirect to="/" /> */}
     </Switch>
   )
  }
