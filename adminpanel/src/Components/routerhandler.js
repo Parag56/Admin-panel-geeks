@@ -4,6 +4,7 @@ import {
   Redirect,
   Switch,
   Route,
+  useHistory,
 } from "react-router-dom";
 import PersistentDrawerLeft from "../Components/MainLayout/MainLayout";
 import LoginPage from "./LoginPage/LoginPage";
@@ -11,7 +12,8 @@ import Questions from "./Questionpage/Questions";
 import RegisteredUsers from "./RegisteredUser/RegisteredUsers";
 import { AuthContext } from "./Context/Auth-Context";
 let logouttimer;
-function Routerhandler() {
+function Routerhandler(){
+  const history=useHistory()
   const [token, settoken] = useState(null);
   const [adminid, setadminid] = useState(null);
   const [adminname, setadminname] = useState(null);
@@ -33,6 +35,7 @@ function Routerhandler() {
         expiration: tokenexpirationdate.toISOString(),
       })
     );
+    <Redirect to="/home"/>
   });
 
   //This will remove the admin object from the local storage when logout is pressed
@@ -104,7 +107,7 @@ if(token){
 else{
   routes=( 
     <Switch>
-     <Route path="*">
+     <Route path="/">
       <LoginPage />
     </Route>
     </Switch>
