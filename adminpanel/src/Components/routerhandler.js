@@ -46,16 +46,23 @@ function Routerhandler(){
     settokenexpirationdate(null);
     localStorage.removeItem("adminData");
   });
-
   useEffect(() => {
-    if (token && tokenexpirationdate) {
-      const remainingtime =
-        tokenexpirationdate.getTime() - new Date().getTime();
-      logouttimer = setTimeout(logout, remainingtime);
-    } else {
-      clearTimeout(logouttimer);
+    const storeddata = JSON.parse(localStorage.getItem("adminData"));
+    if(
+      storeddata &&
+      storeddata.token &&
+      new Date(storeddata.expiration) > new Date()
+    ){
+      login(
+        storeddata.adminid,
+        storeddata.token,
+        storeddata.adminname,
+        new Date(storeddata.expiration)
+      );
+    }else{
+      logout()
     }
-  }, [token, logout, tokenexpirationdate]);
+  },[]);
 
   // Checks the remaining time in the token
   useEffect(() => {
@@ -63,26 +70,11 @@ function Routerhandler(){
       const remainingtime =
         tokenexpirationdate.getTime() - new Date().getTime();
       logouttimer = setTimeout(logout, remainingtime);
-    } else {
+    } else if(logouttimer) {
       clearTimeout(logouttimer);
     }
   }, [token, logout, tokenexpirationdate]);
-  // Auto logins if the token is still present
-  useEffect(() => {
-    const storeddata = JSON.parse(localStorage.getItem("adminData"));
-    if (
-      storeddata &&
-      storeddata.token &&
-      new Date(storeddata.expiration) > new Date()
-    ) {
-      login(
-        storeddata.adminid,
-        storeddata.token,
-        storeddata.adminname,
-        new Date(storeddata.expiration)
-      );
-    }
-  }, []);
+ 
 let routes
 if(token){
   routes=(
