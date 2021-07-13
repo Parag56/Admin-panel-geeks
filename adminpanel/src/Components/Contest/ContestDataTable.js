@@ -28,6 +28,10 @@ const ContestDataTable = (props) => {
                 <TableCell align="right">{props.row.noofquestions}</TableCell>
                 <TableCell align="right">{props.row.totalslots}</TableCell>
                 <TableCell align="right">{props.row.slotstrength}</TableCell>
+                <TableCell align="right"> <button style={{border:'none', padding:'5px 8px', borderRadius:'5px',color:'white', backgroundColor:'#6F2D91'}} onClick={()=>{
+                    props.setupdatecontestid(props.row.name)
+                    props.setupdateformstate(prev=>!prev)
+                } } >Update</button>  </TableCell>
                
                 
           

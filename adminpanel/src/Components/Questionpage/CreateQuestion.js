@@ -29,7 +29,7 @@ const CreateQuestion = (props) => {
     };  
     //error snack bar function...
 
-   
+   //image upload states and functions...
     const [image,setImage]=useState([])
     const onChange = (imageList, addUpdateIndex) => {
         // data for submit
@@ -37,6 +37,7 @@ const CreateQuestion = (props) => {
         setImage(imageList);
       };
       const maxNumber=1;
+   //image upload states and functions...
 
       const [options,setOptions]=useState([
            //{option:'',value:''}

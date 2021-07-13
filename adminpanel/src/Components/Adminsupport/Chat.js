@@ -100,9 +100,9 @@ import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar'
 		   setmessages([...messages,{msg,id,timestamp}])
 	   })
 	   socket.on('disconnectclient',()=>{
-		   //here...
-		   setOpenSuccess(true)
-		   setSuccessMessage(`chat ended with ${activeusername}`)
+		//    //here...
+		//    setOpenSuccess(true)
+		//    setSuccessMessage(`chat ended with ${activeusername}`)
 		socket.disconnect()
 	})
 	}
@@ -112,9 +112,13 @@ import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar'
 
 
     const handleendchat=()=>{
-		if(socket&&activeroomid){
-			socket.emit('endchat',activeroomid,JSON.parse(localStorage.getItem('adminData')).adminid)
-		}
+		// if(socket&&activeroomid){
+		// 	socket.emit('endchat',activeroomid,JSON.parse(localStorage.getItem('adminData')).adminid)
+			
+		// }
+		 //here...
+		 setOpenSuccess(true)
+		 setSuccessMessage(`chat ended with ${activeusername}`)
 	}
     return (    
 <div className="admin__chat">

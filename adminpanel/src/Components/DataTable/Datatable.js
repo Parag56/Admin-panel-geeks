@@ -409,7 +409,8 @@ export default function EnhancedTable(props) {
                      { props.heading==='user' &&
                        <UserDataTable   row={row} isItemSelected={isItemSelected}  selected={selected} labelId={labelId} />}
                        {props.heading==='contest' && 
-                       <ContestDataTable row={row} isItemSelected={isItemSelected} labelId={labelId} /> }
+                       <ContestDataTable row={row} setupdatecontestid={props.setupdatecontestid} setupdateformstate={props.setupdateformstate}
+                       isItemSelected={isItemSelected} labelId={labelId} /> }
                        {props.heading==='RegisteredUsers' && 
                         <RegisteredUserTable row={row} isItemSelected={isItemSelected} labelId={labelId}   />
                        }

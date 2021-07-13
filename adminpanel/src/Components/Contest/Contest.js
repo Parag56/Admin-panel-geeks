@@ -7,6 +7,7 @@ import $ from 'jquery'
 import EnhancedTable from '../DataTable/Datatable'
 import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar'
 import { CSVLink, CSVDownload } from "react-csv";
+import UpdateContest from './UpdateContest'
 function Contest(){
     const [loading,setloading]=useState(true)
     const [contestdata,setcontestdata]=useState([])
@@ -14,6 +15,7 @@ function Contest(){
     const [rows,setrows]=useState([])
     const [formstate,setformstate]=useState(false)
     const [updateformstate,setupdateformstate]=useState(false)
+    const [updatecontestid,setupdatecontestid]=useState(null)
     const [q,setQ]=useState("")
     const [filterstate,setFilterState]=useState("")
      //success snackbar functions..
@@ -102,10 +104,11 @@ const search=(rows)=>{
 
     return (
         <div>
-            <Header listsize={contestdata.length} updateformstate={updateformstate} filterFields={filterFields} 
+            <Header listsize={contestdata.length} 
+             showupdatebtn={true} filterFields={filterFields} 
             filterstate={filterstate} setFilterState={setFilterState} setformstate={setformstate}
              setloading={setloading} required="true"/>
-             { !formstate  && !loading && <div style={{ display:'flex', justifyContent:'space-between',padding:'5px',margin:'10px' }} >
+             { !formstate && !updateformstate && !loading && <div style={{ display:'flex', justifyContent:'space-between',padding:'5px',margin:'10px' }} >
            <CSVLink data={rows}  filename={"Contests.csv"}  ><button className="imageBtn" >Export Csv</button> 
            </CSVLink>
            <input style={{height:'40px' }} type="text" placeholder="Search here..." value={q} onChange={(e)=>setQ(e.target.value)} />
@@ -114,20 +117,25 @@ const search=(rows)=>{
             {loading &&!formstate&& (
                 <Loader />
             )}
-            {!loading && contestdata.length===0&&!formstate&&(
+            {!loading && !updateformstate && contestdata.length===0&&!formstate&&(
                 <Nulldata setformstate={setformstate} required="true"/>
             )}
-            {!loading &&  !formstate && contestdata.length>0 &&(
+            {!loading && !updateformstate && !formstate && contestdata.length>0 &&(
                 <EnhancedTable heading="contest" loading={loading} formstate={formstate} setloading={setloading}
-                setformstate={setformstate}  setOpenSuccess={setOpenSuccess} 
+                setformstate={setformstate} setupdateformstate={setupdateformstate}  setOpenSuccess={setOpenSuccess}
+                 setupdatecontestid={setupdatecontestid}
                 setSuccessMessage={setSuccessMessage} rows={search(rows)} headCells={headCells} />
             )}
-              {formstate&&(
+              {!updateformstate && formstate&&(
              <div>
             <CreateContest  setloading={setloading} setOpenSuccess={setOpenSuccess} 
             setSuccessMessage={setSuccessMessage}  setformstate={setformstate}/>
              </div>
          )}
+
+         { !loading && !formstate && updateformstate && (  <div> 
+             <UpdateContest setloading={setloading} loading={loading} setupdateformstate={setupdateformstate} updatecontestid={updatecontestid} />
+            </div>  ) }
         </div>
     )
 }
