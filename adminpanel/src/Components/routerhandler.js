@@ -4,6 +4,7 @@ import {
   Redirect,
   Switch,
   Route,
+  useHistory,
 } from "react-router-dom";
 import PersistentDrawerLeft from "../Components/MainLayout/MainLayout";
 import LoginPage from "./LoginPage/LoginPage";
@@ -11,7 +12,8 @@ import Questions from "./Questionpage/Questions";
 import RegisteredUsers from "./RegisteredUser/RegisteredUsers";
 import { AuthContext } from "./Context/Auth-Context";
 let logouttimer;
-function Routerhandler() {
+function Routerhandler(){
+  const history=useHistory()
   const [token, settoken] = useState(null);
   const [adminid, setadminid] = useState(null);
   const [adminname, setadminname] = useState(null);
@@ -33,6 +35,7 @@ function Routerhandler() {
         expiration: tokenexpirationdate.toISOString(),
       })
     );
+    <Redirect to="/home"/>
   });
 
   //This will remove the admin object from the local storage when logout is pressed
@@ -43,47 +46,36 @@ function Routerhandler() {
     settokenexpirationdate(null);
     localStorage.removeItem("adminData");
   });
-
-  useEffect(() => {
-    if (token && tokenexpirationdate) {
-      const remainingtime =
-        tokenexpirationdate.getTime() - new Date().getTime();
-      logouttimer = setTimeout(logout, remainingtime);
-    } else {
-      clearTimeout(logouttimer);
-    }
-  }, [token, logout, tokenexpirationdate]);
-
-  //Checks the remaining time in the token
-  // useEffect(() => {
-  //   if (token && tokenexpirationdate) {
-  //     const remainingtime =
-  //       tokenexpirationdate.getTime() - new Date().getTime();
-  //     logouttimer = setTimeout(logout, remainingtime);
-  //   } else {
-  //     clearTimeout(logouttimer);
-  //   }
-  // }, [token, logout, tokenexpirationdate]);
-
-  //Auto logins if the token is still present
   useEffect(() => {
     const storeddata = JSON.parse(localStorage.getItem("adminData"));
-    if (
+    if(
       storeddata &&
       storeddata.token &&
       new Date(storeddata.expiration) > new Date()
-    ) {
+    ){
       login(
         storeddata.adminid,
         storeddata.token,
         storeddata.adminname,
         new Date(storeddata.expiration)
       );
+    }else{
+      logout()
     }
-  }, []);
+  },[]);
+
+  // Checks the remaining time in the token
+  useEffect(() => {
+    if (token && tokenexpirationdate) {
+      const remainingtime =
+        tokenexpirationdate.getTime() - new Date().getTime();
+      logouttimer = setTimeout(logout, remainingtime);
+    } else if(logouttimer) {
+      clearTimeout(logouttimer);
+    }
+  }, [token, logout, tokenexpirationdate]);
+ 
 let routes
-
-
 if(token){
   routes=(
     <Switch>
@@ -103,7 +95,6 @@ if(token){
     <Redirect to="/home" />
   </Switch>
   )
- 
 }
 else{
   routes=( 
@@ -111,7 +102,6 @@ else{
      <Route path="/">
       <LoginPage />
     </Route>
-     {/* <Redirect to="/" /> */}
     </Switch>
   )
  }
