@@ -99,27 +99,20 @@ import SuccessSnackBar from '../SuccessSnackBar/SuccessSnackBar'
        socket.on('message',(msg,id,timestamp)=>{
 		   setmessages([...messages,{msg,id,timestamp}])
 	   })
-<<<<<<< HEAD
-	   socket.on('disconnectclient',()=>{
-		//    //here...
-		//    setOpenSuccess(true)
-		//    setSuccessMessage(`chat ended with ${activeusername}`)
-=======
 	   socket.on('userdisconnect-successfull',()=>{
 		//here...
 		setOpenSuccess(true)
 		setSuccessMessage(`chat ended with ${activeusername}`)
 		console.log('worked')
->>>>>>> f3b26530a87e5b95a41ce5352870fe6bcf85bc50
 		socket.disconnect()
 	})
 	}
     const handleendchat=()=>{
-		// if(socket&&activeroomid){
-		// 	socket.emit('endchat',activeroomid,JSON.parse(localStorage.getItem('adminData')).adminid)
+		if(socket&&activeroomid){
+			socket.emit('endchat',activeroomid,JSON.parse(localStorage.getItem('adminData')).adminid)
 			
-		// }
-		 //here...
+		}
+		
 		 setOpenSuccess(true)
 		 setSuccessMessage(`chat ended with ${activeusername}`)
 	}
