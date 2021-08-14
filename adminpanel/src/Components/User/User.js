@@ -122,7 +122,6 @@ function User() {
            </CSVLink>
            <input style={{height:'40px' }} type="text" placeholder="Search here..." value={q} onChange={(e)=>setQ(e.target.value)} />
            </div> }
-          {/* <CSVDownload data={csvData} target="_blank" />; */}
          {loading&&!formstate&&(
            <Loader/>
          )}
